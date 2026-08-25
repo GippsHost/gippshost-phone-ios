@@ -43,8 +43,6 @@ struct ContentView: View {
 	@State private var meetingsListViewModel: MeetingsListViewModel?
 	
 	@State private var orientation = UIDevice.current.orientation
-	@State var sideMenuIsOpen: Bool = false
-	
 	@State private var searchIsActive = false
 	@State private var text = ""
 	@FocusState private var focusedField: Bool
@@ -72,9 +70,7 @@ struct ContentView: View {
 	@State var isShowConversationFragment = false
 	@State var isShowAccountProfileFragment = false
 	@State var isShowSettingsFragment = false
-	@State var isShowRecordingsListFragment = false
-	@State var isShowHelpFragment = false
-	
+
 	@State var fullscreenVideo = false
 	
 	@State var isShowScheduleMeetingFragment = false
@@ -556,15 +552,16 @@ struct ContentView: View {
 										if searchIsActive == false {
 											HStack {
 												Button {
-													openMenu()
+													withAnimation {
+														isShowSettingsFragment = true
+													}
 												} label: {
-											Image("list")
-														.renderingMode(.template)
-														.resizable()
+													Image(systemName: "gearshape")
+														.font(.system(size: 23, weight: .regular))
 														.foregroundStyle(.white)
 														.frame(width: 25, height: 25, alignment: .leading)
-												.padding(.all, 5)
-										}
+														.padding(.all, 5)
+												}
 
 										if let account = coreContext.accounts.first {
 											AccountStatusPill(model: account)
@@ -1256,21 +1253,6 @@ struct ContentView: View {
 						.zIndex(1)
 					}
 					
-					SideMenu(
-						width: geometry.size.width / 5 * 4,
-						isOpen: $sideMenuIsOpen,
-						menuClose: self.openMenu,
-						safeAreaInsets: geometry.safeAreaInsets,
-						isShowLoginFragment: $isShowLoginFragment,
-						isShowAccountProfileFragment: $isShowAccountProfileFragment,
-						isShowSettingsFragment: $isShowSettingsFragment,
-						isShowRecordingsListFragment: $isShowRecordingsListFragment,
-						isShowHelpFragment: $isShowHelpFragment
-					)
-					.environmentObject(accountProfileViewModel)
-					.ignoresSafeArea(.all)
-					.zIndex(2)
-					
 					if isShowLoginFragment {
 						LoginFragment(
 							isShowBack: true,
@@ -1688,22 +1670,6 @@ struct ContentView: View {
 						.transition(.move(edge: .trailing))
 					}
 					
-					if isShowRecordingsListFragment {
-						RecordingsListFragment(
-							isShowRecordingsListFragment: $isShowRecordingsListFragment
-						)
-						.zIndex(3)
-						.transition(.move(edge: .trailing))
-					}
-					
-					if isShowHelpFragment {
-						HelpFragment(
-							isShowHelpFragment: $isShowHelpFragment
-						)
-						.zIndex(3)
-						.transition(.move(edge: .trailing))
-					}
-					
 					if let meetingsListVM = meetingsListViewModel, isShowSendCancelMeetingNotificationPopup {
 						PopupView(
 							isShowPopup: $isShowSendCancelMeetingNotificationPopup,
@@ -2065,12 +2031,6 @@ struct ContentView: View {
 					$0.registrationState == .Failed
 				}
 				
-                withAnimation {
-                    if self.sideMenuIsOpen {
-                        self.sideMenuIsOpen = false
-                    }
-                }
-                
                 if self.isShowLoginFragment {
                     self.isShowLoginFragment = false
                 }
@@ -2151,12 +2111,6 @@ struct ContentView: View {
 			}
 		}
 		.id(coreContext.reloadID)
-	}
-	
-	func openMenu() {
-		withAnimation {
-			self.sideMenuIsOpen.toggle()
-		}
 	}
 	
 	func resetFilter() {
