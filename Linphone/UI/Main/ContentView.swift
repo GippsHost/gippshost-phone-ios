@@ -49,14 +49,14 @@ struct ContentView: View {
 	@State private var text = ""
 	@FocusState private var focusedField: Bool
 	
-	@State private var showingDialer = true
+	@State private var showingDialer = false
 	@State var isMenuOpen = false
 	@State var isShowDeleteContactPopup = false
 	@State var isShowDeleteAllHistoryPopup = false
 	@State var isShowEditContactFragment = false
 	@State var isShowEditContactFragmentInContactDetails = false
 	@State var isShowEditContactFragmentAddress = ""
-	@State var isShowStartCallFragment = true
+	@State var isShowStartCallFragment = false
 	@State var isShowStartConversationFragment = false
 	@State var isShowDismissPopup = false
 	@State var isShowDeleteMeetingNotificationPopup = false
@@ -331,22 +331,23 @@ struct ContentView: View {
 										Button(action: {
 											resetFilter()
 											
-											sharedMainViewModel.changeIndexView(indexViewInt: 0)
+											sharedMainViewModel.changeIndexView(indexViewInt: 4)
+											sharedMainViewModel.displayedFriend = nil
 											sharedMainViewModel.displayedCall = nil
 											sharedMainViewModel.displayedConversation = nil
 											sharedMainViewModel.displayedMeeting = nil
 										}, label: {
 											VStack {
-												Image("address-book")
+												Image("dialer")
 													.renderingMode(.template)
 													.resizable()
-													.foregroundStyle(sharedMainViewModel.indexView == 0 ? Color.orangeMain500 : Color.grayMain2c600)
+													.foregroundStyle(sharedMainViewModel.indexView == 4 ? Color.orangeMain500 : Color.grayMain2c600)
 													.frame(width: 25, height: 25)
-												if sharedMainViewModel.indexView == 0 {
-													Text("bottom_navigation_contacts_label")
+												if sharedMainViewModel.indexView == 4 {
+													Text("Dialler")
 														.default_text_style_700(styleSize: 10)
 												} else {
-													Text("bottom_navigation_contacts_label")
+													Text("Dialler")
 														.default_text_style(styleSize: 10)
 												}
 											}
@@ -405,6 +406,32 @@ struct ContentView: View {
 											.padding(.top)
 											.accessibilityIdentifier("bottom_bar_calls_button")
 										}
+
+										Spacer()
+
+										Button(action: {
+											resetFilter()
+											sharedMainViewModel.changeIndexView(indexViewInt: 0)
+											sharedMainViewModel.displayedCall = nil
+											sharedMainViewModel.displayedConversation = nil
+											sharedMainViewModel.displayedMeeting = nil
+										}, label: {
+											VStack {
+												Image("address-book")
+													.renderingMode(.template)
+													.resizable()
+													.foregroundStyle(sharedMainViewModel.indexView == 0 ? Color.orangeMain500 : Color.grayMain2c600)
+													.frame(width: 25, height: 25)
+												if sharedMainViewModel.indexView == 0 {
+													Text("bottom_navigation_contacts_label")
+														.default_text_style_700(styleSize: 10)
+												} else {
+													Text("bottom_navigation_contacts_label")
+														.default_text_style(styleSize: 10)
+												}
+											}
+										})
+										.padding(.top)
 										
 										Spacer()
 										
@@ -604,7 +631,7 @@ struct ContentView: View {
                                                         .frame(width: avatarSize, height: avatarSize)
                                                 }
 												
-												Text(String(localized: sharedMainViewModel.indexView == 0 ? "bottom_navigation_contacts_label" : (sharedMainViewModel.indexView == 1 ? "bottom_navigation_calls_label" : (sharedMainViewModel.indexView == 2 ? "bottom_navigation_conversations_label" : "bottom_navigation_meetings_label"))))
+												Text(sharedMainViewModel.indexView == 4 ? "Dialler" : String(localized: sharedMainViewModel.indexView == 0 ? "bottom_navigation_contacts_label" : (sharedMainViewModel.indexView == 1 ? "bottom_navigation_calls_label" : (sharedMainViewModel.indexView == 2 ? "bottom_navigation_conversations_label" : "bottom_navigation_meetings_label"))))
 													.default_text_style_white_800(styleSize: 20)
 													.padding(.leading, 2)
 												
@@ -907,7 +934,13 @@ struct ContentView: View {
 											.roundedCorner(10, corners: [.bottomRight, .bottomLeft])
 										}
 										
-										if sharedMainViewModel.indexView == 0 {
+										if sharedMainViewModel.indexView == 4 {
+											DialerContainer(
+												callViewModel: callViewModel,
+												showingDialer: $showingDialer,
+												isShowStartCallFragment: $isShowStartCallFragment
+											)
+										} else if sharedMainViewModel.indexView == 0 {
 											ContactsContainer(
 												contactsListViewModel: $contactsListViewModel,
 												isShowEditContactFragment: $isShowEditContactFragment,
@@ -977,22 +1010,23 @@ struct ContentView: View {
 									Button(action: {
 										resetFilter()
 										
-										sharedMainViewModel.changeIndexView(indexViewInt: 0)
+										sharedMainViewModel.changeIndexView(indexViewInt: 4)
+										sharedMainViewModel.displayedFriend = nil
 										sharedMainViewModel.displayedCall = nil
 										sharedMainViewModel.displayedConversation = nil
 										sharedMainViewModel.displayedMeeting = nil
 									}, label: {
 										VStack {
-											Image("address-book")
+											Image("dialer")
 												.renderingMode(.template)
 												.resizable()
-												.foregroundStyle(sharedMainViewModel.indexView == 0 ? Color.orangeMain500 : Color.grayMain2c600)
+												.foregroundStyle(sharedMainViewModel.indexView == 4 ? Color.orangeMain500 : Color.grayMain2c600)
 												.frame(width: 25, height: 25)
-											if sharedMainViewModel.indexView == 0 {
-												Text("bottom_navigation_contacts_label")
+											if sharedMainViewModel.indexView == 4 {
+												Text("Dialler")
 													.default_text_style_700(styleSize: 10)
 											} else {
-												Text("bottom_navigation_contacts_label")
+												Text("Dialler")
 													.default_text_style(styleSize: 10)
 											}
 										}
@@ -1052,6 +1086,33 @@ struct ContentView: View {
 										.padding(.top)
 										.frame(width: 66)
 									}
+
+									Spacer()
+
+									Button(action: {
+										resetFilter()
+										sharedMainViewModel.changeIndexView(indexViewInt: 0)
+										sharedMainViewModel.displayedCall = nil
+										sharedMainViewModel.displayedConversation = nil
+										sharedMainViewModel.displayedMeeting = nil
+									}, label: {
+										VStack {
+											Image("address-book")
+												.renderingMode(.template)
+												.resizable()
+												.foregroundStyle(sharedMainViewModel.indexView == 0 ? Color.orangeMain500 : Color.grayMain2c600)
+												.frame(width: 25, height: 25)
+											if sharedMainViewModel.indexView == 0 {
+												Text("bottom_navigation_contacts_label")
+													.default_text_style_700(styleSize: 9)
+											} else {
+												Text("bottom_navigation_contacts_label")
+													.default_text_style(styleSize: 9)
+											}
+										}
+									})
+									.padding(.top)
+									.frame(width: 66)
                                     
                                     if !sharedMainViewModel.disableChatFeature {
                                         Spacer()
@@ -2191,6 +2252,57 @@ struct ContactsContainer: View {
 				}
 			}
 		}
+	}
+}
+
+struct DialerContainer: View {
+	@ObservedObject var callViewModel: CallViewModel
+	@StateObject private var startCallViewModel = StartCallViewModel()
+	@Binding var showingDialer: Bool
+	@Binding var isShowStartCallFragment: Bool
+	@State private var transferAddress: Address?
+	@State private var isShowTransferPopup = false
+
+	var body: some View {
+		VStack(spacing: 0) {
+			HStack(spacing: 12) {
+				Image("phone")
+					.renderingMode(.template)
+					.resizable()
+					.foregroundStyle(Color.grayMain2c500)
+					.frame(width: 24, height: 24)
+
+				TextField("Enter a number", text: $startCallViewModel.searchField)
+					.keyboardType(.phonePad)
+					.default_text_style(styleSize: 20)
+					.accessibilityIdentifier("dialler_tab_input")
+
+				if !startCallViewModel.searchField.isEmpty {
+					Button {
+						startCallViewModel.searchField = String(startCallViewModel.searchField.dropLast())
+					} label: {
+						Image("backspace-fill")
+							.resizable()
+							.frame(width: 26, height: 26)
+					}
+				}
+			}
+			.padding(.horizontal, 20)
+			.frame(height: 64)
+			.background(Color.white)
+
+			DialerBottomSheet(
+				startCallViewModel: startCallViewModel,
+				callViewModel: callViewModel,
+				isShowStartCallFragment: $isShowStartCallFragment,
+				showingDialer: $showingDialer,
+				transferAddress: $transferAddress,
+				isShowTransferPopup: $isShowTransferPopup,
+				currentCall: nil,
+				embedded: true
+			)
+		}
+		.background(Color.gray100.opacity(0.5))
 	}
 }
 

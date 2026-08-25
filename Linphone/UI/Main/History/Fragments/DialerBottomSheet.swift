@@ -46,6 +46,7 @@ struct DialerBottomSheet: View {
 	@Binding var isShowTransferPopup: Bool
 	
 	let currentCall: Call?
+	var embedded = false
 	
 	var body: some View {
 		VStack(alignment: .center, spacing: 0) {
@@ -62,7 +63,7 @@ struct DialerBottomSheet: View {
 						}
 					}
 					.padding(.trailing)
-				} else {
+				} else if !embedded {
 					Capsule()
 						.fill(currentCall != nil ? .white : Color.grayMain2c300)
 						.frame(width: 75, height: 5)
@@ -423,7 +424,9 @@ struct DialerBottomSheet: View {
 										}
 									}
 								} else {
-									showingDialer = false
+									if !embedded {
+										showingDialer = false
+									}
 
 									magicSearch.currentFilter = ""
 
@@ -436,7 +439,9 @@ struct DialerBottomSheet: View {
 										callViewModel.resetCallView()
 
 									withAnimation {
-										isShowStartCallFragment.toggle()
+										if !embedded {
+											isShowStartCallFragment.toggle()
+										}
 										startCallViewModel.interpretAndStartCall()
 									}
 

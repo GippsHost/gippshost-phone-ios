@@ -35,7 +35,7 @@ class SharedMainViewModel: ObservableObject {
 	@Published var generalTermsAccepted = false
 	@Published var displayProfileMode = false
 	@Published var defaultAvatar: URL?
-	@Published var indexView: Int = 1
+	@Published var indexView: Int = 4
 	@Published var increaseTrustLevelPopupAccepted = false
 	@Published var increaseTrustLevelPopupDeviceName = ""
 	@Published var increaseTrustLevelPopupDeviceAddress: Address?
@@ -77,9 +77,8 @@ class SharedMainViewModel: ObservableObject {
 	private init() {
 		let preferences = UserDefaults.standard
 		
-		// GippsHost Phone is calling-first: always start on Calls, while still
-		// allowing the customer to select Contacts from the bottom navigation.
-		indexView = 1
+		// GippsHost Phone is calling-first: always start on the dedicated dialler.
+		indexView = 4
 		preferences.set(indexView, forKey: indexViewKey)
 		
 		if preferences.object(forKey: welcomeViewKey) == nil {
