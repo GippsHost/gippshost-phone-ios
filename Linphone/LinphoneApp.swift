@@ -229,6 +229,9 @@ struct AppView: View {
 	@StateObject private var navigationManager = NavigationManager()
 	@StateObject private var telecomManager = TelecomManager.shared
 	@StateObject private var sharedMainViewModel = SharedMainViewModel.shared
+	@State private var checkedPermissionsThisLaunch = false
+	@State private var missingPermissions: [String] = []
+	@State private var showMissingPermissionsAlert = false
 
 	var body: some View {
 		RootView(
@@ -242,6 +245,18 @@ struct AppView: View {
 		.environmentObject(navigationManager)
 		.environmentObject(telecomManager)
 		.environmentObject(sharedMainViewModel)
+		.onAppear {
+			checkPermissionsIfNeeded()
+		}
+		.alert("Allow permissions for Phone", isPresented: $showMissingPermissionsAlert) {
+			Button("Not now", role: .cancel) {}
+			Button("Open Settings") {
+				guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+				UIApplication.shared.open(settingsURL)
+			}
+		} message: {
+			Text("Phone needs access to \(missingPermissions.joined(separator: ", ")) to provide calling, incoming-call alerts, contacts and related phone features.")
+		}
 		.onChange(of: scenePhase) { newPhase in
 			if !telecomManager.callInProgress {
 				switch newPhase {
@@ -255,6 +270,17 @@ struct AppView: View {
 					break
 				}
 			}
+		}
+	}
+
+	private func checkPermissionsIfNeeded() {
+		guard !checkedPermissionsThisLaunch else { return }
+		checkedPermissionsThisLaunch = true
+
+		PermissionManager.shared.checkPermissionsOnAppLoad { missing in
+			guard !missing.isEmpty else { return }
+			missingPermissions = missing
+			showMissingPermissionsAlert = true
 		}
 	}
 }

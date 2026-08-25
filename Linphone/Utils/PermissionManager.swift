@@ -36,6 +36,53 @@ class PermissionManager: ObservableObject {
 	@Published var allPermissionsHaveBeenDisplayed = false
 	
 	private init() {}
+
+	/// Checks every permission used by the calling experience when the app starts.
+	/// New permissions are requested with the system sheet. Permissions that were
+	/// previously denied are returned so the app can offer a shortcut to Settings.
+	func checkPermissionsOnAppLoad(completion: @escaping ([String]) -> Void) {
+		UNUserNotificationCenter.current().getNotificationSettings { settings in
+			let cameraStatus = AVCaptureDevice.authorizationStatus(for: .video)
+			let microphoneStatus = AVAudioSession.sharedInstance().recordPermission
+			let photoStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+			let contactsStatus = CNContactStore.authorizationStatus(for: .contacts)
+
+			let hasUndeterminedPermission = settings.authorizationStatus == .notDetermined
+				|| cameraStatus == .notDetermined
+				|| microphoneStatus == .undetermined
+				|| photoStatus == .notDetermined
+				|| contactsStatus == .notDetermined
+
+			if hasUndeterminedPermission {
+				DispatchQueue.main.async {
+					self.getPermissions()
+					completion([])
+				}
+				return
+			}
+
+			var missingPermissions: [String] = []
+			if settings.authorizationStatus == .denied {
+				missingPermissions.append("Notifications")
+			}
+			if microphoneStatus == .denied {
+				missingPermissions.append("Microphone")
+			}
+			if contactsStatus == .denied {
+				missingPermissions.append("Contacts")
+			}
+			if cameraStatus == .denied {
+				missingPermissions.append("Camera")
+			}
+			if photoStatus == .denied {
+				missingPermissions.append("Photos")
+			}
+
+			DispatchQueue.main.async {
+				completion(missingPermissions)
+			}
+		}
+	}
 	
 	func getPermissions() {
 		pushNotificationRequestPermission {
