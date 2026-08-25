@@ -562,6 +562,7 @@ struct ContentView: View {
 														.frame(width: 25, height: 25, alignment: .leading)
 														.padding(.all, 5)
 												}
+												.buttonStyle(.plain)
 
 										if let account = coreContext.accounts.first {
 											AccountStatusPill(model: account)
