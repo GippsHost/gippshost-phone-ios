@@ -201,7 +201,7 @@ class CoreContext: ObservableObject {
 		
 		coreQueue.async {
 			LoggingService.Instance.logLevel = LogLevel.Debug
-			Factory.Instance.logCollectionPath = Factory.Instance.getDataDir(context: UnsafeMutablePointer<Int8>(mutating: (SharedMainViewModel.appGroupName as NSString).utf8String))
+			Factory.Instance.logCollectionPath = Log.collectionPath
 			Factory.Instance.enableLogCollection(state: LogCollectionState.Enabled)
 
 			MDMManager.shared.loadXMLConfigFromMdm(config: AppServices.config)
@@ -706,7 +706,7 @@ enum AppServices {
 		}
 		return config
 	}
-	
+
 	static func setupConfigIfNeeded() {
 		Log.info("Checking if linphonerc file exists already. If not, creating one as a copy of linphonerc-default")
 		if let rcDir = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: SharedMainViewModel.appGroupName)?

@@ -29,22 +29,28 @@ import Firebase
 #endif
 
 class Log: LoggingServiceDelegate {
+	static var collectionPath: String {
+		let appGroupName = Bundle.main.object(forInfoDictionaryKey: "APP_GROUP_NAME") as? String
+		let directory = appGroupName.flatMap {
+			FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: $0)
+		}?.appendingPathComponent("Library/Logs/Linphone", isDirectory: true)
+			?? FileManager.default.temporaryDirectory.appendingPathComponent("LinphoneLogs", isDirectory: true)
+		do {
+			try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+		} catch {
+			return FileManager.default.temporaryDirectory.path
+		}
+		return directory.path
+	}
 	
 	static let instance = Log()
 		
 	var debugEnabled = true // Todo : bind to app parameters
 	var service = LoggingService.Instance
 	
-	let appGroupName: String = {
-		Bundle.main.object(forInfoDictionaryKey: "APP_GROUP_NAME") as? String
-		?? {
-			fatalError("APP_GROUP_NAME not defined in Info.plist")
-		}()
-	}()
-
 	private init() {
 		service.domain = Bundle.main.bundleIdentifier!
-		Core.setLogCollectionPath(path: Factory.Instance.getDataDir(context: UnsafeMutablePointer<Int8>(mutating: (self.appGroupName as NSString).utf8String)))
+		Core.setLogCollectionPath(path: Self.collectionPath)
 		Core.enableLogCollection(state: LogCollectionState.Enabled)
 		setMask()
 		LoggingService.Instance.addDelegate(delegate: self)
