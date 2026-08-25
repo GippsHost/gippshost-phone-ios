@@ -49,6 +49,7 @@ struct SideMenu: View {
 			
 			VStack {
 				VStack {
+					if CoreContext.shared.accounts.isEmpty {
 					HStack {
 						Image("gippshost-cloud")
 							.renderingMode(.template)
@@ -117,6 +118,7 @@ struct SideMenu: View {
 						withAnimation {
 							isShowLoginFragment = true
 						}
+					}
 					}
 					
 					Rectangle()

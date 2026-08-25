@@ -330,7 +330,7 @@ struct ContentView: View {
 										
 										Button(action: {
 											resetFilter()
-											
+
 											sharedMainViewModel.changeIndexView(indexViewInt: 4)
 											sharedMainViewModel.displayedFriend = nil
 											sharedMainViewModel.displayedCall = nil
@@ -558,80 +558,25 @@ struct ContentView: View {
 												Button {
 													openMenu()
 												} label: {
-													Image("list")
+											Image("list")
 														.renderingMode(.template)
 														.resizable()
 														.foregroundStyle(.white)
 														.frame(width: 25, height: 25, alignment: .leading)
-														.padding(.all, 5)
-												}
-												
-                                                if let index = accountProfileViewModel.defaultAccountModelIndex,
-                                                   index < coreContext.accounts.count {
-                                                    
-                                                    let account = coreContext.accounts[index]
-                                                    let imagePath = account.getImagePath()
-                                                    let finalUrl = imagePath.appendingQueryItem("v", value: UUID().uuidString)
+												.padding(.all, 5)
+										}
 
-                                                    AsyncImage(url: finalUrl)
-                                                        { image in
-                                                            switch image {
-                                                            case .empty:
-                                                                ProgressView()
-                                                                    .frame(width: avatarSize, height: avatarSize)
-                                                            case .success(let image):
-                                                                image
-                                                                    .resizable()
-                                                                    .aspectRatio(contentMode: .fill)
-                                                                    .frame(width: avatarSize, height: avatarSize)
-                                                                    .clipShape(Circle())
-                                                                    .onAppear {
-                                                                        imageTmp = image
-                                                                    }
-                                                            case .failure:
-                                                                if let avatar = account.avatarModel {
-                                                                    let tmpImage = contactsManager.textToImage(firstName: avatar.name, lastName: "")
-                                                                    Image(uiImage: tmpImage)
-                                                                        .resizable()
-                                                                        .frame(width: avatarSize, height: avatarSize)
-                                                                        .clipShape(Circle())
-                                                                } else if let cachedImage = imageTmp {
-                                                                    cachedImage
-                                                                        .resizable()
-                                                                        .aspectRatio(contentMode: .fill)
-                                                                        .frame(width: avatarSize, height: avatarSize)
-                                                                        .clipShape(Circle())
-                                                                } else {
-                                                                    ProgressView()
-                                                                        .frame(width: avatarSize, height: avatarSize)
-                                                                }
-                                                            @unknown default:
-                                                                EmptyView()
-                                                            }
-                                                        }
-                                                        .id(imagePath)
-                                                        .onTapGesture {
-                                                            openMenu()
-                                                        }
-                                                        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ImageChanged"))) { _ in
-                                                            imageTmp = nil
-                                                        }
-                                                    
-                                                } else if let cachedImage = imageTmp {
-                                                    cachedImage
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fill)
-														.frame(width: avatarSize, height: avatarSize)
-														.clipShape(Circle())
-														.onTapGesture {
-															openMenu()
-														}
-                                                } else {
-                                                    ProgressView()
-                                                        .frame(width: avatarSize, height: avatarSize)
-                                                }
-												
-												Spacer()
+										if let account = coreContext.accounts.first {
+											AccountStatusPill(model: account)
+												.onTapGesture {
+													accountProfileViewModel.accountModelIndex = 0
+													withAnimation {
+														isShowAccountProfileFragment = true
+													}
+												}
+										}
+
+										Spacer()
 												
 												Button {
 													withAnimation {
@@ -2211,6 +2156,27 @@ struct ContentView: View {
 			magicSearch.currentFilter = ""
 			magicSearch.searchForContacts()
 		}
+	}
+}
+
+private struct AccountStatusPill: View {
+	@ObservedObject var model: AccountModel
+
+	var body: some View {
+		HStack(spacing: 5) {
+			Circle()
+				.fill(model.registrationStateAssociatedUIColor)
+				.frame(width: 7, height: 7)
+
+			Text(model.humanReadableRegistrationState)
+				.foregroundStyle(.white)
+				.default_text_style_600(styleSize: 11)
+				.lineLimit(1)
+		}
+		.padding(.horizontal, 9)
+		.padding(.vertical, 5)
+		.background(.white.opacity(0.16))
+		.clipShape(Capsule())
 	}
 }
 
