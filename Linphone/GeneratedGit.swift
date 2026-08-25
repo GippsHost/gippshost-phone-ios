@@ -1,7 +1,7 @@
 import Foundation
 
 public enum AppGitInfo {
-    public static let branch = "feature/gherkin_tests"
-    public static let commit = "f8a88af94"
-    public static let tag = "6.3.0-alpha"
+    public static let branch = "master"
+    public static let commit = "9c0605d"
+    public static let tag = "no-tag"
 }

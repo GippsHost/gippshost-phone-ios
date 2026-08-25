@@ -27,7 +27,7 @@ class URIHandler {
 	// Need to cover all Info.plist URL schemes.
 	private static let callSchemes = ["sip", "sip-linphone", "linphone-sip", "tel", "callto"]
 	private static let secureCallSchemes = ["sips", "sips-linphone", "linphone-sips"]
-	private static let configurationSchemes = ["linphone-config"]
+	private static let configurationSchemes = ["gippshost-phone"]
 	private static let sharedExtensionSchemes = ["linphone-message"]
 	private static let mentionSchemes = ["linphone-mention"]
 
@@ -58,7 +58,7 @@ class URIHandler {
 	}
 	
 	static func handleURL(url: URL) {
-		Log.info("[URIHandler] handleURL: \(url)")
+		Log.info("[URIHandler] handling incoming URL with scheme \(url.scheme ?? "unknown")")
 		if let scheme = url.scheme {
 			if secureCallSchemes.contains(scheme) {
 				initiateCall(url: url, withScheme: "sips")
@@ -98,7 +98,7 @@ class URIHandler {
 	private static func initiateConfiguration(url: URL) {
 		if autoRemoteProvisioningOnConfigUriHandler() {
 			CoreContext.shared.doOnCoreQueue { core in
-				Log.info("[URIHandler] provisioning app with URI: \(url.resourceSpecifier)")
+				Log.info("[URIHandler] provisioning GippsHost Phone")
 				do {
 					addCoreDelegate()
 					var urlString = url.resourceSpecifier
@@ -108,6 +108,14 @@ class URIHandler {
 					
 					if !urlString.starts(with: "https://") {
 						urlString = "https://" + urlString
+					}
+					guard let provisioningURL = URL(string: urlString),
+						  provisioningURL.scheme == "https",
+						  let host = provisioningURL.host?.lowercased(),
+						  host == "nexus.gippshost.com.au" || host == "nexus-dev.gippshost.com.au" else {
+						Log.error("[URIHandler] rejected provisioning URL outside the GippsHost allowlist")
+						toast("Failed_uri_handler_bad_config_address")
+						return
 					}
 					
 					core.config?.setString(section: "misc", key: "config-uri", value: urlString)

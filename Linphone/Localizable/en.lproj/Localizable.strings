@@ -1,6 +1,6 @@
 /* 
   Localizable.strings
-  Linphone
+  GippsHost Phone
  
 */
 
@@ -242,7 +242,7 @@
 "conversation_end_to_end_encrypted_event_title" = "End-to-end encrypted conversation";
 "conversation_end_to_end_encrypted_event_subtitle" = "Messages in this conversation are e2e encrypted. Only your correspondent can decrypt them.";
 "conversation_end_to_end_encrypted_bottom_sheet_title" = "Guaranteed confidentiality";
-"conversation_end_to_end_encrypted_bottom_sheet_message" = "Thanks to end-to-end encryption technology in Linphone, messages, calls and meetings confidentiality are guaranteed. No-one can decrypt exchanged data, not even ourselves.";
+"conversation_end_to_end_encrypted_bottom_sheet_message" = "Thanks to end-to-end encryption technology in GippsHost Phone, messages, calls and meetings confidentiality are guaranteed. No-one can decrypt exchanged data, not even ourselves.";
 "conversation_ephemeral_messages_duration_disabled" = "Disabled";
 "conversation_ephemeral_messages_duration_multiple_days" = "%d days";
 "conversation_ephemeral_messages_duration_one_day" = "1 day";
@@ -355,13 +355,13 @@
 "generic_address_picker_suggestions_list_title" = "Suggestions";
 "help_about_advanced_title" = "Advanced";
 "help_about_check_for_update" = "Check update";
-"help_about_contribute_translations_title" = "Contribute on Linphone translation";
+"help_about_contribute_translations_title" = "Contribute on GippsHost Phone translation";
 "help_about_open_source_licenses_subtitle" = "© Belledonne Communications 2010-2024";
 "help_about_open_source_licenses_title" = "GNU General Public License v3.0";
-"help_about_privacy_policy_subtitle" = "What information Linphone collects and uses";
+"help_about_privacy_policy_subtitle" = "What information GippsHost Phone collects and uses";
 "help_about_privacy_policy_title" = "Privacy policy";
-"help_about_title" = "About Linphone";
-"help_about_user_guide_title" = "Linphone user guide";
+"help_about_title" = "About GippsHost Phone";
+"help_about_user_guide_title" = "GippsHost Phone user guide";
 "help_about_user_guide_subtitle" = "Learn how to master all app features, step by step.";
 "help_about_version_title" = "Version";
 "help_dialog_update_available_message" = "A new version %@ is available. Do you want to update?";
@@ -403,7 +403,7 @@
 "manage_account_device_last_connection" = "Last connection:";
 "manage_account_device_remove" = "Remove";
 "manage_account_devices_title" = "Devices";
-"manage_account_dialog_international_prefix_help_message" = "Pick your country to allow Linphone to match your contacts.";
+"manage_account_dialog_international_prefix_help_message" = "Pick your country to allow GippsHost Phone to match your contacts.";
 "manage_account_dialog_remove_account_message" = "If you wish to delete your account permanently, go to: https://sip.linphone.org";
 "manage_account_dialog_remove_account_title" = "Sign out of your account?";
 "manage_account_outbound_proxy" = "Outbound SIP Proxy";
@@ -630,7 +630,7 @@
 "web_platform_register_email_url" = "https://subscribe.linphone.org/register/email";
 "website_contact_url" = "https://linphone.org/contact";
 "website_download_url" = "https://linphone.org/linphone-softphone";
-"website_open_source_licences_usage_url" = "https://wiki.linphone.org/xwiki/wiki/public/view/Linphone/Third%20party%20components%20/";
+"website_open_source_licences_usage_url" = "https://wiki.linphone.org/xwiki/wiki/public/view/GippsHost Phone/Third%20party%20components%20/";
 "website_user_guide_url" = "https://linphone.org/en/docs/";
 "website_privacy_policy_url" = "https://linphone.org/en/privacy-policy";
 "website_terms_and_conditions_url" = "https://www.linphone.org/en/terms-of-use";

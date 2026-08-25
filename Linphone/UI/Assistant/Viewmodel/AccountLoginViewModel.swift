@@ -26,7 +26,7 @@ class AccountLoginViewModel: ObservableObject {
 	
 	@Published var username: String = ""
 	@Published var passwd: String = ""
-	@Published var domain: String = "sip.linphone.org"
+	@Published var domain: String = "voice.gippshost.com.au"
 	@Published var displayName: String = ""
 	@Published var transportType: String = "TLS"
 	@Published var authId: String = ""
@@ -38,6 +38,12 @@ class AccountLoginViewModel: ObservableObject {
 	init() {}
 	
 	func login() {
+		guard Self.isAllowedVoiceDomain(domain) else {
+			DispatchQueue.main.async {
+				ToastViewModel.shared.show("Only GippsHost Voice accounts can be added.")
+			}
+			return
+		}
 		coreContext.doOnCoreQueue { core in
 			guard self.coreContext.networkStatusIsConnected else {
 				DispatchQueue.main.async {
@@ -169,7 +175,7 @@ class AccountLoginViewModel: ObservableObject {
 				core.defaultAccount = account
 				
 				DispatchQueue.main.async {
-					self.domain = "sip.linphone.org"
+					self.domain = "voice.gippshost.com.au"
 					self.transportType = "TLS"
 					self.authId = ""
 					self.outboundProxy = ""
@@ -177,6 +183,11 @@ class AccountLoginViewModel: ObservableObject {
 				
 			} catch { NSLog(error.localizedDescription) }
 		}
+	}
+
+	private static func isAllowedVoiceDomain(_ value: String) -> Bool {
+		let host = value.trimmingCharacters(in: .whitespacesAndNewlines).lowercased().trimmingCharacters(in: CharacterSet(charactersIn: "."))
+		return host == "voice.gippshost.com.au" || host.hasSuffix(".voice.gippshost.com.au")
 	}
 	
 	func unregister() {

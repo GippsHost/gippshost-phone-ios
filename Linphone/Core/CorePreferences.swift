@@ -124,8 +124,8 @@ class CorePreferences: ObservableObject {
 	
 	var defaultDomain: String {
 		get {
-			let raw = config.getString(section: "app", key: "default_domain", defaultString: "sip.linphone.org")
-			return safeString(raw, defaultValue: "sip.linphone.org")
+			let raw = config.getString(section: "app", key: "default_domain", defaultString: "voice.gippshost.com.au")
+			return safeString(raw, defaultValue: "voice.gippshost.com.au")
 		}
 		set {
 			config.setString(section: "app", key: "default_domain", value: newValue)
@@ -189,7 +189,7 @@ class CorePreferences: ObservableObject {
 	
 	var disableChatFeature: Bool {
 		get {
-			config.getBool(section: "ui", key: "disable_chat_feature", defaultValue: false)
+			true
 		}
 		set {
 			config.setBool(section: "ui", key: "disable_chat_feature", value: newValue)
@@ -198,7 +198,7 @@ class CorePreferences: ObservableObject {
 	
 	var disableMeetings: Bool {
 		get {
-			config.getBool(section: "ui", key: "disable_meetings_feature", defaultValue: false)
+			true
 		}
 		set {
 			config.setBool(section: "ui", key: "disable_meetings_feature", value: newValue)
