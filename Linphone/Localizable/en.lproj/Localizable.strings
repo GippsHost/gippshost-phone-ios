@@ -65,6 +65,10 @@
 "assistant_account_creation_wrong_phone_number" = "Wrong number?";
 "assistant_account_login" = "Sign in";
 "gippshost_setup_title" = "Set up GippsHost Phone";
+"gippshost_hosted_system" = "I have a GippsHost hosted phone system";
+"gippshost_hosted_system_hint" = "Enter the name before .voice.gippshost.com.au";
+"gippshost_server" = "Server";
+"gippshost_subdomain" = "Hosted system name";
 "assistant_account_login_forbidden_error" = "Wrong username or password";
 "assistant_account_register" = "Register";
 "assistant_account_register_push_notification_not_received_error" = "Push notification with auth token not received in 5 seconds, please try again later";

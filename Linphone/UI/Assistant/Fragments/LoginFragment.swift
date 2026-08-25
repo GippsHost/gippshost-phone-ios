@@ -28,9 +28,13 @@ struct LoginFragment: View {
 	@StateObject private var keyboard = KeyboardResponder()
 	
 	@State private var isSecured: Bool = true
+	@State private var usesHostedSystem = false
+	@State private var hostedSystemName = ""
 	
 	@FocusState var isNameFocused: Bool
 	@FocusState var isPasswordFocused: Bool
+	@FocusState var isServerFocused: Bool
+	@FocusState var isHostedSystemNameFocused: Bool
 	
 	@State private var isShowPopup = false
 	
@@ -44,6 +48,39 @@ struct LoginFragment: View {
 	var isShowBack = false
 	
 	var onBackPressed: (() -> Void)?
+
+	private var resolvedServer: String {
+		if usesHostedSystem {
+			let name = hostedSystemName
+				.trimmingCharacters(in: .whitespacesAndNewlines)
+				.lowercased()
+				.trimmingCharacters(in: CharacterSet(charactersIn: "."))
+			return name.isEmpty ? "" : "\(name).voice.gippshost.com.au"
+		}
+		return accountLoginViewModel.domain
+			.trimmingCharacters(in: .whitespacesAndNewlines)
+			.lowercased()
+			.trimmingCharacters(in: CharacterSet(charactersIn: "."))
+	}
+
+	private var hostedSystemNameIsValid: Bool {
+		guard usesHostedSystem else { return true }
+		let labels = hostedSystemName
+			.trimmingCharacters(in: .whitespacesAndNewlines)
+			.lowercased()
+			.split(separator: ".")
+		guard !labels.isEmpty else { return false }
+		return labels.allSatisfy { label in
+			label.range(of: "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$", options: .regularExpression) != nil
+		}
+	}
+
+	private var formIsValid: Bool {
+		!accountLoginViewModel.username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+			&& !accountLoginViewModel.passwd.isEmpty
+			&& hostedSystemNameIsValid
+			&& AccountLoginViewModel.isAllowedVoiceDomain(resolvedServer)
+	}
 
 	var body: some View {
 		NavigationView {
@@ -227,8 +264,73 @@ struct LoginFragment: View {
 						.stroke(isPasswordFocused ? Color.orangeMain500 : Color.gray200, lineWidth: 1)
 				)
 				.padding(.bottom)
+
+				Toggle(isOn: $usesHostedSystem) {
+					Text("gippshost_hosted_system")
+						.default_text_style_600(styleSize: 15)
+				}
+				.tint(Color.orangeMain500)
+				.padding(.bottom)
+				.onChange(of: usesHostedSystem) { enabled in
+					if !enabled {
+						hostedSystemName = ""
+						accountLoginViewModel.domain = "voice.gippshost.com.au"
+					}
+				}
+
+				if usesHostedSystem {
+					Text(String(localized: "gippshost_subdomain") + "*")
+						.default_text_style_700(styleSize: 15)
+						.padding(.bottom, -5)
+
+					HStack(spacing: 4) {
+						TextField("wendymcewan", text: $hostedSystemName)
+							.default_text_style(styleSize: 15)
+							.disableAutocorrection(true)
+							.autocapitalization(.none)
+							.focused($isHostedSystemNameFocused)
+						Text(".voice.gippshost.com.au")
+							.default_text_style(styleSize: 13)
+							.foregroundStyle(Color.grayMain2c500)
+					}
+					.frame(height: 25)
+					.padding(.horizontal, 20)
+					.padding(.vertical, 15)
+					.cornerRadius(60)
+					.overlay(
+						RoundedRectangle(cornerRadius: 60)
+							.inset(by: 0.5)
+							.stroke(isHostedSystemNameFocused ? Color.orangeMain500 : Color.gray200, lineWidth: 1)
+					)
+					Text("gippshost_hosted_system_hint")
+						.default_text_style(styleSize: 12)
+						.foregroundStyle(Color.grayMain2c500)
+						.padding(.leading, 12)
+						.padding(.bottom)
+				} else {
+					Text(String(localized: "gippshost_server") + "*")
+						.default_text_style_700(styleSize: 15)
+						.padding(.bottom, -5)
+
+					TextField("voice.gippshost.com.au", text: $accountLoginViewModel.domain)
+						.default_text_style(styleSize: 15)
+						.disableAutocorrection(true)
+						.autocapitalization(.none)
+						.frame(height: 25)
+						.padding(.horizontal, 20)
+						.padding(.vertical, 15)
+						.cornerRadius(60)
+						.overlay(
+							RoundedRectangle(cornerRadius: 60)
+								.inset(by: 0.5)
+								.stroke(isServerFocused ? Color.orangeMain500 : Color.gray200, lineWidth: 1)
+						)
+						.padding(.bottom)
+						.focused($isServerFocused)
+				}
 				
 				Button(action: {
+					accountLoginViewModel.domain = resolvedServer
 					SharedMainViewModel.shared.changeDisplayProfileMode()
 					self.accountLoginViewModel.login()
 					coreContext.loggingInProgress = true
@@ -240,9 +342,9 @@ struct LoginFragment: View {
 				})
 				.padding(.horizontal, 20)
 				.padding(.vertical, 10)
-				.background((accountLoginViewModel.username.isEmpty || accountLoginViewModel.passwd.isEmpty) ? Color.orangeMain100 : Color.orangeMain500)
+				.background(formIsValid ? Color.orangeMain500 : Color.orangeMain100)
 				.cornerRadius(60)
-				.disabled(accountLoginViewModel.username.isEmpty || accountLoginViewModel.passwd.isEmpty)
+				.disabled(!formIsValid)
 				.padding(.bottom)
 				
 				HStack {

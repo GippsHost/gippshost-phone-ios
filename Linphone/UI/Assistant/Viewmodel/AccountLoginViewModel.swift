@@ -28,7 +28,7 @@ class AccountLoginViewModel: ObservableObject {
 	@Published var passwd: String = ""
 	@Published var domain: String = "voice.gippshost.com.au"
 	@Published var displayName: String = ""
-	@Published var transportType: String = "TLS"
+	@Published var transportType: String = "UDP"
 	@Published var authId: String = ""
 	@Published var sipProxyUrl: String = ""
 	@Published var outboundProxy: String = ""
@@ -38,12 +38,18 @@ class AccountLoginViewModel: ObservableObject {
 	init() {}
 	
 	func login() {
-		guard Self.isAllowedVoiceDomain(domain) else {
+		let usernameWithDomain = username.split(separator: "@")
+		let requestedUsername = usernameWithDomain.count > 1 ? String(usernameWithDomain.first ?? "") : username
+		let requestedDomain = usernameWithDomain.count > 1 ? String(usernameWithDomain.last ?? "") : domain
+		guard Self.isAllowedVoiceDomain(requestedDomain) else {
 			DispatchQueue.main.async {
+				self.coreContext.loggingInProgress = false
 				ToastViewModel.shared.show("Only GippsHost Voice accounts can be added.")
 			}
 			return
 		}
+		username = requestedUsername
+		domain = requestedDomain.trimmingCharacters(in: .whitespacesAndNewlines).lowercased().trimmingCharacters(in: CharacterSet(charactersIn: "."))
 		coreContext.doOnCoreQueue { core in
 			guard self.coreContext.networkStatusIsConnected else {
 				DispatchQueue.main.async {
@@ -53,15 +59,6 @@ class AccountLoginViewModel: ObservableObject {
 				return
 			}
 			do {
-				let usernameWithDomain = self.username.split(separator: "@")
-				
-				if usernameWithDomain.count > 1 {
-					DispatchQueue.main.async {
-						self.domain = String(usernameWithDomain.last ?? "")
-						self.username = String(usernameWithDomain.first ?? "")
-					}
-				}
-				
 				if self.domain != "sip.linphone.org" {
 					if let assistantLinphone = Bundle.main.path(forResource: "assistant_third_party_default_values", ofType: nil) {
 						core.loadConfigFromXml(xmlUri: assistantLinphone)
@@ -176,7 +173,7 @@ class AccountLoginViewModel: ObservableObject {
 				
 				DispatchQueue.main.async {
 					self.domain = "voice.gippshost.com.au"
-					self.transportType = "TLS"
+					self.transportType = "UDP"
 					self.authId = ""
 					self.outboundProxy = ""
 				}
@@ -185,7 +182,7 @@ class AccountLoginViewModel: ObservableObject {
 		}
 	}
 
-	private static func isAllowedVoiceDomain(_ value: String) -> Bool {
+	static func isAllowedVoiceDomain(_ value: String) -> Bool {
 		let host = value.trimmingCharacters(in: .whitespacesAndNewlines).lowercased().trimmingCharacters(in: CharacterSet(charactersIn: "."))
 		return host == "voice.gippshost.com.au" || host.hasSuffix(".voice.gippshost.com.au")
 	}
