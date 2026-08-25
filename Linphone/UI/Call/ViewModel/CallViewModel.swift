@@ -850,6 +850,9 @@ class CallViewModel: ObservableObject {
 	}
 	
 	func terminateCall() {
+		DispatchQueue.main.async {
+			callControlHaptic(.medium)
+		}
 		coreContext.doOnCoreQueue { core in
 			if self.currentCall != nil {
 				self.telecomManager.terminateCall(call: self.currentCall!)
@@ -1013,6 +1016,7 @@ class CallViewModel: ObservableObject {
 						
 						DispatchQueue.main.async {
 							self.isPaused = false
+							callControlHaptic()
 						}
 					} else {
 						Log.info("[CallViewModel] Pausing call \(self.currentCall!.remoteAddress!.asStringUriOnly())")
@@ -1020,6 +1024,7 @@ class CallViewModel: ObservableObject {
 						
 						DispatchQueue.main.async {
 							self.isPaused = true
+							callControlHaptic()
 						}
 					}
 				} catch _ {

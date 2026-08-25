@@ -20,6 +20,14 @@
 import SwiftUI
 import CoreHaptics
 import AudioToolbox
+
+/// Feedback for call controls must never fall back to an audible system sound.
+func callControlHaptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
+	guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+	let generator = UIImpactFeedbackGenerator(style: style)
+	generator.prepare()
+	generator.impactOccurred()
+}
 	
 func touchFeedback() {
 	if CHHapticEngine.capabilitiesForHardware().supportsHaptics {

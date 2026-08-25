@@ -189,6 +189,8 @@ class CoreContext: ObservableObject {
 			
 			self.mCore.callkitEnabled = true
 			self.mCore.pushNotificationEnabled = true
+			// GippsHost Phone uses silent call controls with haptic feedback.
+			self.mCore.callToneIndicationsEnabled = false
 			
 			let appGitVersion = AppGitInfo.commit
 			let appGitBranch = AppGitInfo.branch
