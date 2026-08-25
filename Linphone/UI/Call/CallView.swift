@@ -304,36 +304,6 @@ struct CallView: View {
 									.padding(.all, 10)
 							}
 							
-							Text(callViewModel.displayName)
-								.default_text_style_white_800(styleSize: 16)
-                                .lineLimit(1)
-							
-							if !telecomManager.outgoingCallStarted && telecomManager.callInProgress {
-								Text("|")
-									.default_text_style_white_800(styleSize: 16)
-								
-								ZStack {
-									Text(callViewModel.timeElapsed.convertDurationToString())
-										.onReceive(callViewModel.timer) { _ in
-											callViewModel.timeElapsed = callViewModel.currentCall?.duration ?? 0
-										}
-										.default_text_style_white_800(styleSize: 16)
-										.if(callViewModel.isPaused || telecomManager.isPausedByRemote) { view in
-											view.hidden()
-										}
-									
-									if callViewModel.isPaused {
-										Text("call_state_paused")
-											.default_text_style_white_800(styleSize: 16)
-											.lineLimit(1)
-									} else if telecomManager.isPausedByRemote {
-										Text("call_state_paused_by_remote")
-											.default_text_style_white_800(styleSize: 16)
-											.lineLimit(1)
-									}
-								}
-							}
-							
 							Spacer()
 							
 							if callViewModel.isPaused || telecomManager.isPausedByRemote {
@@ -510,10 +480,10 @@ struct CallView: View {
 	func simpleCallView(geometry: GeometryProxy, minBottomSheetHeight: Double, isLandscape: Bool, topBarCallCounter: CGFloat) -> some View {
 		ZStack {
 			if callViewModel.isOneOneCall {
-				let avatarSize = min(topBarCallCounter == 40.0 && isLandscape && idiom != .pad ? geometry.size.height * 0.15 : geometry.size.height * 0.25, 220)
+				let avatarSize = min(topBarCallCounter == 40.0 && isLandscape && idiom != .pad ? geometry.size.height * 0.14 : geometry.size.height * 0.18, 160)
 
-					VStack {
-						Spacer()
+					VStack(spacing: 18) {
+						Spacer(minLength: 24)
 
 						ZStack {
 							if callViewModel.isRemoteDeviceTrusted {
@@ -522,13 +492,17 @@ struct CallView: View {
 									.frame(width: avatarSize + 6, height: avatarSize + 6)
 							}
 
-							if let avatar = callViewModel.avatarModel {
-								Avatar(
-									contactAvatarModel: avatar,
-									avatarSize: avatarSize,
-									hidePresence: true
-								)
-							}
+							Circle()
+								.fill(Color.gray600)
+								.frame(width: avatarSize, height: avatarSize)
+								.overlay {
+									Image("phone")
+										.renderingMode(.template)
+										.resizable()
+										.scaledToFit()
+										.foregroundStyle(.white)
+										.frame(width: avatarSize * 0.38, height: avatarSize * 0.38)
+								}
 
 							if callViewModel.isRemoteDeviceTrusted {
 								VStack {
@@ -549,12 +523,34 @@ struct CallView: View {
 						}
 
 						Text(callViewModel.displayName)
-							.padding(.top)
-							.default_text_style_white(styleSize: 22)
+							.default_text_style_white_800(styleSize: 28)
+							.lineLimit(1)
 
-						if !AppServices.corePreferences.hideSipAddresses {
-							Text(callViewModel.remoteAddressCleanedString)
-								.default_text_style_white_300(styleSize: 16)
+						HStack(spacing: 8) {
+							Image("phone")
+								.renderingMode(.template)
+								.resizable()
+								.foregroundStyle(Color.grayMain2c300)
+								.frame(width: 18, height: 18)
+
+							ZStack {
+								Text(callViewModel.timeElapsed.convertDurationToString())
+									.onReceive(callViewModel.timer) { _ in
+										callViewModel.timeElapsed = callViewModel.currentCall?.duration ?? 0
+									}
+									.default_text_style_white(styleSize: 18)
+									.if(callViewModel.isPaused || telecomManager.isPausedByRemote) { view in
+										view.hidden()
+									}
+
+								if callViewModel.isPaused {
+									Text("call_state_paused")
+										.default_text_style_white_800(styleSize: 18)
+								} else if telecomManager.isPausedByRemote {
+									Text("call_state_paused_by_remote")
+										.default_text_style_white_800(styleSize: 18)
+								}
+							}
 						}
 
 						Spacer()
@@ -653,7 +649,7 @@ struct CallView: View {
 					}
 				}
 				
-				if telecomManager.outgoingCallStarted {
+				if telecomManager.outgoingCallStarted && !telecomManager.callConnected {
 					VStack {
 						ActivityIndicator(color: .white)
 							.frame(width: 20, height: 20)

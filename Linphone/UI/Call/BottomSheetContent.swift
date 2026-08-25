@@ -96,38 +96,22 @@ struct BottomSheetContent: View {
                     
                     Spacer()
                     
-                    if !SharedMainViewModel.shared.disableVideoCall {
-                        ZStack {
-                            Button {
-                                if optionsChangeLayout == 3 {
-                                    optionsChangeLayout = 2
-                                    callViewModel.toggleVideoMode(isAudioOnlyMode: false)
-                                } else {
-                                    callViewModel.displayMyVideo()
-                                }
-                            } label: {
-                                HStack {
-                                    Image(callViewModel.videoDisplayed ? "video-camera" : "video-camera-slash")
-                                        .renderingMode(.template)
-                                        .resizable()
-                                        .foregroundStyle(.white)
-                                        .frame(width: 32, height: 32)
-                                }
-                            }
-                            .buttonStyle(PressedButtonStyle(buttonSize: buttonSize))
-                            .frame(width: buttonSize, height: buttonSize)
-                            .background(Color.gray500)
-                            .cornerRadius(40)
-                            .disabled(callViewModel.isPaused || telecomManager.isPausedByRemote || telecomManager.outgoingCallStarted || optionsChangeLayout == 3)
-                            
-                            if callViewModel.isPaused || telecomManager.isPausedByRemote || telecomManager.outgoingCallStarted || optionsChangeLayout == 3 {
-                                Color.gray600.opacity(0.8)
-                                    .cornerRadius(40)
-                                    .allowsHitTesting(false)
-                            }
+                    Button {
+                        callViewModel.togglePause()
+                    } label: {
+                        HStack {
+                            Image(callViewModel.isPaused ? "play" : "pause")
+                                .renderingMode(.template)
+                                .resizable()
+                                .foregroundStyle(.white)
+                                .frame(width: 32, height: 32)
                         }
-                        .frame(width: buttonSize, height: buttonSize)
                     }
+                    .buttonStyle(PressedButtonStyle(buttonSize: buttonSize))
+                    .frame(width: buttonSize, height: buttonSize)
+                    .background(callViewModel.isPaused ? Color.greenSuccess500 : Color.gray500)
+                    .cornerRadius(40)
+                    .disabled(telecomManager.isPausedByRemote || !telecomManager.callConnected)
                     
                     Button {
                         callViewModel.toggleMuteMicrophone()
