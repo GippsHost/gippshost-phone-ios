@@ -21,6 +21,7 @@ import SwiftUI
 import AVFoundation
 import PhotosUI
 import CoreImage
+import linphonesw
 
 struct QrCodeScannerFragment: View {
 	
@@ -33,6 +34,7 @@ struct QrCodeScannerFragment: View {
 	@State private var showPhotoPicker = false
 	@State private var showPhotoError = false
 	@State private var photoErrorMessage = ""
+	@StateObject private var photoProvisioner = QRPhotoProvisioner()
 
 	private var isSimulator: Bool {
 #if targetEnvironment(simulator)
@@ -107,6 +109,23 @@ struct QrCodeScannerFragment: View {
 			Button("OK", role: .cancel) {}
 		} message: {
 			Text(photoErrorMessage)
+		}
+		.overlay {
+			if photoProvisioner.isApplying {
+				ZStack {
+					Color.black.opacity(0.35).ignoresSafeArea()
+					VStack(spacing: 14) {
+						ProgressView()
+							.tint(Color.orangeMain500)
+						Text("Applying phone setup…")
+							.default_text_style_600(styleSize: 17)
+					}
+					.padding(.horizontal, 28)
+					.padding(.vertical, 22)
+					.background(Color.white)
+					.cornerRadius(18)
+				}
+			}
 		}
 		.onAppear {
 			coreContext.codeScannerIsOpen = true
@@ -184,18 +203,26 @@ struct QrCodeScannerFragment: View {
 	}
 
 	private func handleImportedQRCode(_ payload: String) {
-		guard let url = URL(string: payload), UIApplication.shared.canOpenURL(url) else {
+		guard let url = URL(string: payload),
+			  url.scheme == "https",
+			  let host = url.host?.lowercased(),
+			  host == "nexus.gippshost.com.au" || host == "nexus-dev.gippshost.com.au",
+			  url.path.hasPrefix("/provision/linphone/") else {
 			photoErrorMessage = "The selected image contains a QR code, but it isn't a valid GippsHost Phone setup code."
 			showPhotoError = true
 			return
 		}
 
-		coreContext.doOnCoreQueue { core in
-			try? core.setProvisioninguri(newValue: payload)
-			core.stop()
-			try? core.start()
+		photoProvisioner.apply(payload: payload) { result in
+			switch result {
+			case .success:
+				ToastViewModel.shared.show("Success_qr_code_validated")
+				dismiss()
+			case .failure(let error):
+				photoErrorMessage = error.localizedDescription
+				showPhotoError = true
+			}
 		}
-		ToastViewModel.shared.show("Success_qr_code_validated")
 	}
 
 	private func scannerBackButton(color: Color) -> some View {
@@ -214,6 +241,60 @@ struct QrCodeScannerFragment: View {
 			.padding(.top, 50)
 
 			Spacer()
+		}
+	}
+}
+
+private enum QRProvisioningError: LocalizedError {
+	case failed
+
+	var errorDescription: String? {
+		"Phone couldn't apply this setup code. It may have expired or already been used. Generate a fresh QR code in Apex or Nexus and try again."
+	}
+}
+
+@MainActor
+private final class QRPhotoProvisioner: ObservableObject {
+	@Published var isApplying = false
+	private var delegate: CoreDelegateStub?
+
+	func apply(payload: String, completion: @escaping (Result<Void, Error>) -> Void) {
+		guard !isApplying else { return }
+		isApplying = true
+
+		let provisioningDelegate = CoreDelegateStub(
+			onConfiguringStatus: { [weak self] (_: Core, status: ConfiguringState, _: String) in
+				guard status == .Successful || status == .Failed else { return }
+				Task { @MainActor in
+					guard let self else { return }
+					if let delegate = self.delegate {
+						CoreContext.shared.removeCoreDelegateStub(delegate: delegate)
+					}
+					self.delegate = nil
+					self.isApplying = false
+					completion(status == .Successful ? .success(()) : .failure(QRProvisioningError.failed))
+				}
+			}
+		)
+		delegate = provisioningDelegate
+		CoreContext.shared.addCoreDelegateStub(delegate: provisioningDelegate)
+
+		CoreContext.shared.doOnCoreQueue { core in
+			do {
+				core.config?.setString(section: "misc", key: "config-uri", value: payload)
+				try core.setProvisioninguri(newValue: payload)
+				core.stop()
+				try core.start()
+			} catch {
+				Task { @MainActor in
+					if let delegate = self.delegate {
+						CoreContext.shared.removeCoreDelegateStub(delegate: delegate)
+					}
+					self.delegate = nil
+					self.isApplying = false
+					completion(.failure(error))
+				}
+			}
 		}
 	}
 }
