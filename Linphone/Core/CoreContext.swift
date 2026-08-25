@@ -122,6 +122,31 @@ class CoreContext: ObservableObject {
 			}
 		}
 	}
+
+	/// GippsHost Phone is a managed client. Media and network compatibility
+	/// settings are intentionally fixed instead of being customer configurable.
+	private func applyGippsHostManagedCallingDefaults(core: Core) {
+		core.adaptiveRateControlEnabled = true
+		core.videoCaptureEnabled = false
+		core.videoDisplayEnabled = false
+		core.fecEnabled = false
+		try? core.setMediaencryption(newValue: .None)
+		core.mediaEncryptionMandatory = false
+		core.wifiOnlyEnabled = false
+		core.ipv6Enabled = true
+
+		let enabledAudioCodecs = Set(["G722", "PCMU", "PCMA"])
+		for payload in core.audioPayloadTypes {
+			payload.enable(enabled: enabledAudioCodecs.contains(payload.mimeType.uppercased()))
+		}
+		for payload in core.videoPayloadTypes {
+			payload.enable(enabled: false)
+		}
+
+		AppServices.corePreferences.acceptEarlyMedia = true
+		AppServices.corePreferences.allowOutgoingEarlyMedia = false
+		AppServices.corePreferences.automaticallyStartCallRecording = false
+	}
 	
 	func doOnCoreQueueCoreStarted(synchronous: Bool = false, lambda: @escaping (Core) -> Void) {
 		let isOnQueue = DispatchQueue.getSpecific(key: coreQueueKey) != nil
@@ -284,6 +309,7 @@ class CoreContext: ObservableObject {
 			
 			self.mCoreDelegate = CoreDelegateStub(onGlobalStateChanged: { (core: Core, state: GlobalState, _: String) in
 				if state == GlobalState.On {
+					self.applyGippsHostManagedCallingDefaults(core: core)
 #if DEBUG
 					let pushEnvironment = ".dev"
 #else

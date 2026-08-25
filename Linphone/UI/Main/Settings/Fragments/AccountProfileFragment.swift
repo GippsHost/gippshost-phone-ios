@@ -19,7 +19,7 @@ struct AccountProfileFragment: View {
 							VStack(spacing: 20) {
 								accountDetails(accountModel)
 								doNotDisturbCard
-								otherActions(accountModel)
+								otherActions
 							}
 							.padding(.vertical, 20)
 							.frame(maxWidth: SharedMainViewModel.shared.maxWidth)
@@ -108,23 +108,12 @@ struct AccountProfileFragment: View {
 		.padding(.horizontal)
 	}
 
-	private func otherActions(_ accountModel: AccountModel) -> some View {
+	private var otherActions: some View {
 		VStack(alignment: .leading, spacing: 12) {
 			Text("contact_details_actions_title")
 				.default_text_style_800(styleSize: 18)
 				.padding(.horizontal, 20)
 			VStack(spacing: 18) {
-				NavigationLink {
-					AccountSettingsFragment(accountModel: accountModel)
-				} label: {
-					HStack {
-						Image("gear").renderingMode(.template).resizable()
-							.foregroundStyle(Color.grayMain2c700).frame(width: 25, height: 25)
-						Text("manage_account_settings").foregroundStyle(Color.grayMain2c700)
-							.default_text_style(styleSize: 16).frame(maxWidth: .infinity, alignment: .leading)
-					}
-				}
-				Divider()
 				Button { isShowLogoutPopup = true } label: {
 					HStack {
 						Image("sign-out").renderingMode(.template).resizable()
