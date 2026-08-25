@@ -68,7 +68,6 @@ struct ContentView: View {
 	@State var isShowSipAddressesPopup = false
 	@State var isShowSipAddressesPopupType = 0 // 0 to call, 1  to message, 2 to video call
 	@State var isShowConversationFragment = false
-	@State var isShowAccountProfileFragment = false
 	@State var isShowSettingsFragment = false
 
 	@State var fullscreenVideo = false
@@ -566,12 +565,6 @@ struct ContentView: View {
 
 										if let account = coreContext.accounts.first {
 											AccountStatusPill(model: account)
-												.onTapGesture {
-													accountProfileViewModel.accountModelIndex = 0
-													withAnimation {
-														isShowAccountProfileFragment = true
-													}
-												}
 										}
 
 										Spacer()
@@ -1652,15 +1645,6 @@ struct ContentView: View {
 							isShowScheduleMeetingFragmentSubject = ""
 							isShowScheduleMeetingFragmentParticipants = []
 						}
-					}
-					
-					if isShowAccountProfileFragment {
-						AccountProfileFragment(
-							isShowAccountProfileFragment: $isShowAccountProfileFragment
-						)
-						.environmentObject(accountProfileViewModel)
-						.zIndex(3)
-						.transition(.move(edge: .trailing))
 					}
 					
 					if isShowSettingsFragment {
