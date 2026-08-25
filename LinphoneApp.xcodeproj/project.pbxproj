@@ -1971,7 +1971,7 @@
 				MARKETING_VERSION = 6.2.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DUSE_CRASHLYTICS";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone.notification;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GHPhoneNotification;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2015,7 +2015,7 @@
 				MARKETING_VERSION = 6.2.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DUSE_CRASHLYTICS";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone.notification;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GHPhoneNotification;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2316,7 +2316,7 @@
 				MARKETING_VERSION = 6.2.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DUSE_CRASHLYTICS";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GippsHostPhone;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2378,7 +2378,7 @@
 				MARKETING_VERSION = 6.2.0;
 				OTHER_SWIFT_FLAGS = "$(inherited) -DUSE_CRASHLYTICS";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GippsHostPhone;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2412,7 +2412,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 6.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone.share;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GHPhoneShare;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -2447,7 +2447,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 6.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone.share;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GHPhoneShare;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -2481,7 +2481,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 6.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone.intents;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GHPhoneIntents;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -2518,7 +2518,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 6.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone.intents;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = GHPhoneIntents;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
