@@ -28,10 +28,10 @@ class AccountLoginViewModel: ObservableObject {
 	@Published var passwd: String = ""
 	@Published var domain: String = "voice.gippshost.com.au"
 	@Published var displayName: String = ""
-	@Published var transportType: String = "UDP"
+	@Published var transportType: String = "TCP"
 	@Published var authId: String = ""
 	@Published var sipProxyUrl: String = ""
-	@Published var outboundProxy: String = ""
+	@Published var outboundProxy: String = "voice.gippshost.com.au:5062"
 	
 	private var mCoreDelegate: CoreDelegate!
 	
@@ -135,10 +135,8 @@ class AccountLoginViewModel: ObservableObject {
 				// And we ensure the account will start the registration process
 				accountParams.registerEnabled = true
 				
-				if accountParams.pushNotificationAllowed {
-					accountParams.pushNotificationAllowed = true
-					accountParams.remotePushNotificationAllowed = false
-				}
+				accountParams.pushNotificationAllowed = true
+				accountParams.remotePushNotificationAllowed = false
 #if DEBUG
 				let pushEnvironment = ".dev"
 #else
@@ -178,9 +176,9 @@ class AccountLoginViewModel: ObservableObject {
 				
 				DispatchQueue.main.async {
 					self.domain = "voice.gippshost.com.au"
-					self.transportType = "UDP"
+					self.transportType = "TCP"
 					self.authId = ""
-					self.outboundProxy = ""
+					self.outboundProxy = "voice.gippshost.com.au:5062"
 				}
 				
 			} catch { NSLog(error.localizedDescription) }

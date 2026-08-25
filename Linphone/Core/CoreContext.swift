@@ -147,6 +147,33 @@ class CoreContext: ObservableObject {
 		AppServices.corePreferences.allowOutgoingEarlyMedia = false
 		AppServices.corePreferences.automaticallyStartCallRecording = false
 	}
+
+	/// All GippsHost Phone accounts register through the dedicated Flexisip
+	/// gateway so incoming calls can wake a suspended iOS app through PushKit.
+	/// The FusionPBX registrar and SIP credentials remain unchanged.
+	private func applyGippsHostPushGateway(account: Account) {
+		guard let params = account.params,
+			  let domain = params.identityAddress?.domain,
+			  AccountLoginViewModel.isAllowedVoiceDomain(domain) else { return }
+
+		let expectedProxy = "voice.gippshost.com.au:5062"
+		let currentProxy = params.routesAddresses.first?.asStringUriOnly() ?? ""
+		let needsRouteUpdate = !currentProxy.contains(expectedProxy) ||
+			params.routesAddresses.first?.transport != .Tcp
+		let needsPushUpdate = !params.pushNotificationAllowed || params.remotePushNotificationAllowed
+		guard needsRouteUpdate || needsPushUpdate else { return }
+
+		guard let newParams = params.clone() else { return }
+		if needsRouteUpdate,
+		   let proxyAddress = try? Factory.Instance.createAddress(addr: "sip:\(expectedProxy)") {
+			try? proxyAddress.setTransport(newValue: .Tcp)
+			try? newParams.setRoutesaddresses(newValue: [proxyAddress])
+		}
+		newParams.pushNotificationAllowed = true
+		newParams.remotePushNotificationAllowed = false
+		account.params = newParams
+		Log.info("[CoreContext] Applied GippsHost PushKit gateway to \(account.displayName())")
+	}
 	
 	func doOnCoreQueueCoreStarted(synchronous: Bool = false, lambda: @escaping (Core) -> Void) {
 		let isOnQueue = DispatchQueue.getSpecific(key: coreQueueKey) != nil
@@ -316,6 +343,7 @@ class CoreContext: ObservableObject {
 					let pushEnvironment = ""
 #endif
 					for account in core.accountList {
+						self.applyGippsHostPushGateway(account: account)
 						if account.params?.pushNotificationConfig?.provider != ("apns" + pushEnvironment) {
 							let newParams = account.params?.clone()
 							
@@ -486,6 +514,7 @@ class CoreContext: ObservableObject {
 					ContactsManager.shared.fetchContacts()
 				}
 			}, onAccountAdded: { (_: Core, acc: Account) in
+				self.applyGippsHostPushGateway(account: acc)
 				self.disableRemotePushForVoiceOnlyAccount(account: acc)
 				
 				var accountModels: [AccountModel] = []
