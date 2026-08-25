@@ -18,7 +18,7 @@ struct SettingsFragment: View {
 					header
 					ScrollView {
 						VStack(spacing: 20) {
-							if !phoneNumber.isEmpty { phoneAccountCard }
+							if hasPhoneIdentity { phoneAccountCard }
 							doNotDisturbCard
 							permissionsCard
 							aboutCard
@@ -49,8 +49,13 @@ struct SettingsFragment: View {
 			HStack(spacing: 10) {
 				Image(systemName: "phone.fill")
 					.foregroundStyle(Color.orangeMain500)
-				Text(formattedPhoneNumber)
-					.default_text_style(styleSize: 16)
+				VStack(alignment: .leading, spacing: 2) {
+					Text(phoneNumber.isEmpty ? "Extension" : "Phone number")
+						.foregroundStyle(Color.grayMain2c600)
+						.default_text_style(styleSize: 12)
+					Text(formattedPhoneIdentity)
+						.default_text_style(styleSize: 16)
+				}
 			}
 		}
 		.padding(20).background(.white).cornerRadius(15).padding(.horizontal)
@@ -182,6 +187,18 @@ struct SettingsFragment: View {
 
 	private var phoneNumber: String {
 		AppServices.config.getString(section: "gippshost", key: "phone_number", defaultString: "")
+	}
+
+	private var sipUsername: String {
+		CoreContext.shared.accounts.first?.account.params?.identityAddress?.username ?? ""
+	}
+
+	private var hasPhoneIdentity: Bool {
+		!accountName.isEmpty || !phoneNumber.isEmpty || !sipUsername.isEmpty
+	}
+
+	private var formattedPhoneIdentity: String {
+		phoneNumber.isEmpty ? sipUsername : formattedPhoneNumber
 	}
 
 	private var formattedPhoneNumber: String {

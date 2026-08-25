@@ -23,6 +23,7 @@ import SwiftUI
 import linphonesw
 
 struct ContentView: View {
+	@AppStorage("gippshost_do_not_disturb") private var doNotDisturb = false
 	
 	@Environment(\.scenePhase) var scenePhase
 	
@@ -665,13 +666,24 @@ struct ContentView: View {
 											.padding(.bottom, 2.5)
 											.background(Color.orangeMain500)
 											.overlay {
-												Image("gippshost-cloud")
-													.renderingMode(.template)
-													.resizable()
-													.scaledToFit()
-													.foregroundStyle(.white)
-													.frame(width: 32, height: 28)
-													.allowsHitTesting(false)
+												ZStack {
+													Image("gippshost-cloud")
+														.renderingMode(.template)
+														.resizable()
+														.scaledToFit()
+														.foregroundStyle(.white)
+														.frame(width: 32, height: 28)
+													if doNotDisturb {
+														Text("DND on")
+															.default_text_style_orange_700(styleSize: 11)
+															.padding(.horizontal, 8)
+															.padding(.vertical, 5)
+															.background(.white)
+															.clipShape(Capsule())
+															.offset(x: 64)
+													}
+												}
+												.allowsHitTesting(false)
 											}
 											.roundedCorner(10, corners: [.bottomRight, .bottomLeft])
 										} else {
