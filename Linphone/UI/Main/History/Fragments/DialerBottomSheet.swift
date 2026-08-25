@@ -163,8 +163,7 @@ struct DialerBottomSheet: View {
 							.shadow(color: .black.opacity(0.2), radius: 4)
 					}
 				}
-				.padding(.horizontal, 60)
-				.frame(maxWidth: SharedMainViewModel.shared.maxWidth)
+				.frame(width: 320)
 				
 				HStack {
 					Button {
@@ -228,9 +227,8 @@ struct DialerBottomSheet: View {
 							.shadow(color: .black.opacity(0.2), radius: 4)
 					}
 				}
-				.padding(.horizontal, 60)
 				.padding(.top, 10)
-				.frame(maxWidth: SharedMainViewModel.shared.maxWidth)
+				.frame(width: 320)
 				
 				HStack {
 					Button {
@@ -294,9 +292,8 @@ struct DialerBottomSheet: View {
 							.shadow(color: .black.opacity(0.2), radius: 4)
 					}
 				}
-				.padding(.horizontal, 60)
 				.padding(.top, 10)
-				.frame(maxWidth: SharedMainViewModel.shared.maxWidth)
+				.frame(width: 320)
 				
 				HStack {
 					Button {
@@ -393,9 +390,8 @@ struct DialerBottomSheet: View {
 							.shadow(color: .black.opacity(0.2), radius: 4)
 					}
 				}
-				.padding(.horizontal, 60)
 				.padding(.top, 10)
-				.frame(maxWidth: SharedMainViewModel.shared.maxWidth)
+				.frame(width: 320)
 				
 				if currentCall == nil {
 					HStack {
@@ -475,9 +471,8 @@ struct DialerBottomSheet: View {
 						.frame(width: 100, height: 60)
 						.accessibilityIdentifier("dialer_backspace")
 					}
-					.padding(.horizontal, 60)
 					.padding(.top, 20)
-					.frame(maxWidth: SharedMainViewModel.shared.maxWidth)
+					.frame(width: 320)
 				}
 				
 				Spacer()
