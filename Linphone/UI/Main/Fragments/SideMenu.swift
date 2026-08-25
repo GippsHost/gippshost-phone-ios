@@ -50,11 +50,12 @@ struct SideMenu: View {
 			VStack {
 				VStack {
 					HStack {
-						Image("linphone")
+						Image("gippshost-cloud")
 							.renderingMode(.template)
 							.resizable()
+							.scaledToFit()
 							.foregroundStyle(Color.orangeMain500)
-							.frame(width: 32, height: 32)
+							.frame(width: 42, height: 32)
 							.padding(10)
 						Text(Bundle.main.displayName)
 							.default_text_style_800(styleSize: 16)

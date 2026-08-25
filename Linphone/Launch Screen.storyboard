@@ -15,8 +15,8 @@
 						<rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
 						<autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
 						<subviews>
-							<imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6L3-wz-ibv" image="linphone">
-								<rect key="frame" x="0" y="0" width="240" height="128"/>
+							<imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6L3-wz-ibv" image="gippshost-cloud">
+								<rect key="frame" x="0" y="0" width="180" height="125"/>
 							</imageView>
 						</subviews>
 						<viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
@@ -27,9 +27,9 @@
 							<!-- Center vertically -->
 							<constraint firstItem="6L3-wz-ibv" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="centerYConstraint"/>
 							<!-- Fixed width -->
-							<constraint firstItem="6L3-wz-ibv" firstAttribute="width" constant="240" id="widthConstraint"/>
+							<constraint firstItem="6L3-wz-ibv" firstAttribute="width" constant="180" id="widthConstraint"/>
 							<!-- Fixed height -->
-							<constraint firstItem="6L3-wz-ibv" firstAttribute="height" constant="128" id="heightConstraint"/>
+							<constraint firstItem="6L3-wz-ibv" firstAttribute="height" constant="125" id="heightConstraint"/>
 						</constraints>
 					</view>
 				</viewController>
@@ -39,6 +39,6 @@
 		</scene>
 	</scenes>
 	<resources>
-		<image name="linphone" width="100" height="102"/>
+		<image name="gippshost-cloud" width="118" height="82"/>
 	</resources>
 </document>

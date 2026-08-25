@@ -27,11 +27,11 @@ struct SplashScreen: View {
 			Color.white
 				.ignoresSafeArea()
 
-			Image("linphone")
+			Image("gippshost-cloud")
 				.resizable()
 				.renderingMode(.template)
 				.aspectRatio(contentMode: .fit)
-				.frame(width: 240, height: 128)
+				.frame(width: 180, height: 125)
 				.foregroundColor(ThemeManager.shared.currentTheme.main500)
 
 			ProgressView()
