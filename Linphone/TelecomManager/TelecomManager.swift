@@ -446,6 +446,13 @@ class TelecomManager: ObservableObject {
 	func onCallStateChanged(core: Core, call: Call, state cstate: Call.State, message: String) {
 		let callLog = call.callLog
 		let callId = callLog?.callId ?? ""
+
+		if UserDefaults.standard.bool(forKey: "gippshost_do_not_disturb"),
+		   (cstate == .PushIncomingReceived || cstate == .IncomingReceived) {
+			Log.info("[Call] Declining incoming call because Do Not Disturb is enabled")
+			try? call.decline(reason: .DoNotDisturb)
+			return
+		}
 		
 		if !callInProgress && participantsInvited {
 			if let remoteAddress = call.remoteAddress {
