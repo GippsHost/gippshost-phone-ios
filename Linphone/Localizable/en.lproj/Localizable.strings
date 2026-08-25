@@ -533,7 +533,7 @@
 "settings_advanced_logs_upload_server_url" = "Logs sharing server URL";
 "settings_advanced_calls" = "Advanced calls settings";
 "settings_advanced_video_codecs_title" = "Video codecs";
-"settings_calls_adaptive_rate_control_title" = "Adaptive rate control";
+"settings_calls_adaptive_rate_control_title" = "Adjust call quality for poor connections";
 "settings_calls_auto_record_title" = "Automatically start recording calls";
 "settings_calls_calibrate_echo_canceller_done" = "%@ ms";
 "settings_calls_calibrate_echo_canceller_done_no_echo" = "no echo";
