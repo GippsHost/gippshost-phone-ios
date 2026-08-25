@@ -555,6 +555,7 @@ struct CallView: View {
 
 						Spacer()
 					}
+					.frame(maxWidth: .infinity, alignment: .center)
 				
 				if telecomManager.remoteConfVideo {
 					VStack {

@@ -94,8 +94,6 @@ struct BottomSheetContent: View {
                     .background(Color.redDanger500)
                     .cornerRadius(40)
                     
-                    Spacer()
-                    
                     Button {
                         callViewModel.togglePause()
                     } label: {
@@ -170,8 +168,7 @@ struct BottomSheetContent: View {
                             callViewModel.enforceEarpieceIfNeeded()
                         }
                 }
-                .padding(.horizontal, 20)
-                
+				.offset(x: max((UIScreen.main.bounds.width - geo.size.width) / 2, 0))
                 Spacer()
             }
             .frame(height: minHeight)
