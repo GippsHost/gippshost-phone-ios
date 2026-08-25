@@ -631,10 +631,6 @@ struct ContentView: View {
                                                         .frame(width: avatarSize, height: avatarSize)
                                                 }
 												
-												Text(sharedMainViewModel.indexView == 4 ? "Dialler" : String(localized: sharedMainViewModel.indexView == 0 ? "bottom_navigation_contacts_label" : (sharedMainViewModel.indexView == 1 ? "bottom_navigation_calls_label" : (sharedMainViewModel.indexView == 2 ? "bottom_navigation_conversations_label" : "bottom_navigation_meetings_label"))))
-													.default_text_style_white_800(styleSize: 20)
-													.padding(.leading, 2)
-												
 												Spacer()
 												
 												Button {
@@ -732,6 +728,15 @@ struct ContentView: View {
 											.padding(.top, 2.5)
 											.padding(.bottom, 2.5)
 											.background(Color.orangeMain500)
+											.overlay {
+												Image("gippshost-cloud")
+													.renderingMode(.template)
+													.resizable()
+													.scaledToFit()
+													.foregroundStyle(.white)
+													.frame(width: 32, height: 28)
+													.allowsHitTesting(false)
+											}
 											.roundedCorner(10, corners: [.bottomRight, .bottomLeft])
 										} else {
 											HStack {
