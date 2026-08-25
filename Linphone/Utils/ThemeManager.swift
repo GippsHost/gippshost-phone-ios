@@ -72,8 +72,8 @@ final class ThemeManager: ObservableObject {
 	
 	static let orange = Theme(
 		name: "orange",
-		main100: Color(hex: "#F4E8E9"),
-		main500: Color(hex: "#8F1017")
+		main100: Color(hex: "#FFE5E5"),
+		main500: Color(hex: "#FF0000")
 	)
 	
 	static let yellow = Theme(
