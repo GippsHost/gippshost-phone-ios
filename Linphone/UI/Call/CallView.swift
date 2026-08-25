@@ -90,8 +90,8 @@ struct CallView: View {
 			let minBottomSheetHeight: CGFloat = isLandscape ? (idiom != .pad ? 0.3 : 0.2) : 0.15
 			let maxBottomSheetHeight: CGFloat = isLandscape && idiom != .pad ? 0.6 : 0.4
 			
-			let minHeight = minBottomSheetHeight * UIScreen.main.bounds.height + topBarCallCounter
-			let maxHeight = maxBottomSheetHeight * UIScreen.main.bounds.height + topBarCallCounter
+			let minHeight = minBottomSheetHeight * geo.size.height + topBarCallCounter
+			let maxHeight = maxBottomSheetHeight * geo.size.height + topBarCallCounter
 			
 			ZStack {
 				if #available(iOS 16.4, *), idiom != .pad {

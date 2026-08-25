@@ -50,8 +50,8 @@ struct BottomSheetContent: View {
 	@Binding var imageAudioRoute: String
     
 	var body: some View {
-		let minHeight = minBottomSheetHeight * UIScreen.main.bounds.height
-		let maxHeight = maxBottomSheetHeight * UIScreen.main.bounds.height
+		let minHeight = minBottomSheetHeight * geo.size.height
+		let maxHeight = maxBottomSheetHeight * geo.size.height
 		
 		let basePortraitSize = geo.size.width * 0.24
 		let baseLandscapeSize = geo.size.width * 0.125
@@ -877,54 +877,41 @@ struct BottomSheetView<Content: View>: View {
 	@Binding var pointingUp: CGFloat
 	
 	var body: some View {
-		GeometryReader { geometry in
-			ZStack(alignment: .bottom) {
-				if currentOffset > minHeight {
-					Color.clear
-						.contentShape(Rectangle())
-						.onTapGesture {
-							withAnimation {
-								currentOffset = minHeight
-								pointingUp = 1
-							}
+		ZStack(alignment: .bottom) {
+			if currentOffset > minHeight {
+				Color.clear
+					.contentShape(Rectangle())
+					.onTapGesture {
+						withAnimation {
+							currentOffset = minHeight
+							pointingUp = 1
 						}
-				}
+					}
+			}
 
-				VStack(spacing: 0.0) {
-					content
-				}
-				.frame(
-					width: geometry.size.width,
-					height: maxHeight,
-					alignment: .top
-				)
-				.clipShape(
-					Path(
-						UIBezierPath(
-							roundedRect: CGRect(x: 0.0, y: 0.0, width: geometry.size.width, height: maxHeight),
-							byRoundingCorners: [.topLeft, .topRight],
-							cornerRadii: CGSize(width: 16.0, height: 16.0)
-						)
-						.cgPath
-					)
-				)
-				.highPriorityGesture(
-					DragGesture()
-						.onChanged { value in
-							currentOffset -= value.translation.height
-							currentOffset = min(max(currentOffset, minHeight), maxHeight)
+			VStack(spacing: 0.0) {
+				content
+			}
+			.frame(maxWidth: .infinity)
+			.frame(height: currentOffset, alignment: .top)
+			.clipped()
+			.clipShape(RoundedCorner(radius: 16, corners: [.topLeft, .topRight]))
+			.highPriorityGesture(
+				DragGesture()
+					.onChanged { value in
+						currentOffset -= value.translation.height
+						currentOffset = min(max(currentOffset, minHeight), maxHeight)
+						pointingUp = -(((currentOffset - minHeight) / (maxHeight - minHeight)) - 0.5) * 2
+					}
+					.onEnded { _ in
+						withAnimation {
+							currentOffset = (currentOffset - minHeight <= maxHeight - currentOffset) ? minHeight : maxHeight
 							pointingUp = -(((currentOffset - minHeight) / (maxHeight - minHeight)) - 0.5) * 2
 						}
-						.onEnded { _ in
-							withAnimation {
-								currentOffset = (currentOffset - minHeight <= maxHeight - currentOffset) ? minHeight : maxHeight
-								pointingUp = -(((currentOffset - minHeight) / (maxHeight - minHeight)) - 0.5) * 2
-							}
-						}
-				)
-				.offset(y: maxHeight - currentOffset)
-			}
+					}
+			)
 		}
+		.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
 	}
 }
 
