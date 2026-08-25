@@ -63,7 +63,8 @@
 "assistant_account_create" = "Create";
 "assistant_account_creation_sms_confirmation_explanation" = "We have sent a verification code on your phone number %@.  Please enter the verification code below:";
 "assistant_account_creation_wrong_phone_number" = "Wrong number?";
-"assistant_account_login" = "Login";
+"assistant_account_login" = "Sign in";
+"gippshost_setup_title" = "Set up GippsHost Phone";
 "assistant_account_login_forbidden_error" = "Wrong username or password";
 "assistant_account_register" = "Register";
 "assistant_account_register_push_notification_not_received_error" = "Push notification with auth token not received in 5 seconds, please try again later";
@@ -76,7 +77,7 @@
 "assistant_dialog_general_terms_and_privacy_policy_title" = "General terms & privacy policy";
 "assistant_dialog_general_terms_label" = "general terms";
 "assistant_dialog_privacy_policy_label" = "privacy policy";
-"assistant_forgotten_password" = "Forgotten or unknown password?";
+"assistant_forgotten_password" = "Need help with your phone service?";
 "assistant_forgotten_password_title" = "Account recovery";
 "assistant_forgotten_password_subtitle" = "Choose how to recover your account.";
 "assistant_forgotten_password_message" = "You created your account using:";
@@ -84,18 +85,18 @@
 "assistant_recover_phone_number_account_label" = "A phone number";
 "assistant_recover_phone_number_account_unavailable_no_push_warning" = "Push notifications do not seem to be available on your device, but they are mandatory for recovering a phone number account in the mobile app.";
 "assistant_invalid_uri_toast" = "Invalid URI";
-"assistant_login_third_party_sip_account" = "Use a third party SIP account";
-"assistant_no_account_yet" = "No account yet?";
-"assistant_permissions_access_camera_title" = "**Access camera:** To capture video during video calls and conferences.";
+"assistant_login_third_party_sip_account" = "Enter SIP details manually";
+"assistant_no_account_yet" = "Need a GippsHost phone service?";
+"assistant_permissions_access_camera_title" = "**Access camera:** Optional access for video calls.";
 "assistant_permissions_grant_all_of_them" = "OK";
 "assistant_permissions_post_notifications_title" = "**Post notifications:** To be informed when you receive a message or a call.";
-"assistant_permissions_read_contacts_title" = "**Read contacts:** To display your contacts and find whom is using %@.";
-"assistant_permissions_record_audio_title" = "**Record audio:** So your correspondent can hear you and to record voice messages.";
+"assistant_permissions_read_contacts_title" = "**Read contacts:** To show names from your phone's contacts during calls.";
+"assistant_permissions_record_audio_title" = "**Microphone:** So callers can hear you.";
 "assistant_permissions_skip_permissions" = "Do it later";
 "assistant_permissions_subtitle" = "To fully enjoy %@ we need you to grant us the following permissions :";
 "assistant_permissions_title" = "Grant permissions";
 "assistant_qr_code_invalid_toast" = "Invalid QR code!";
-"assistant_scan_qr_code" = "Scan QR code";
+"assistant_scan_qr_code" = "Scan GippsHost setup QR";
 "assistant_sip_account_transport_protocol" = "Transport";
 "assistant_third_party_sip_account_create_linphone_account" = "I prefer to create an account";
 "assistant_third_party_sip_account_warning_explanation" = "Some features require a %@ account, such as group messaging, video conferences…\n\nThese features are hidden when you register with a third party SIP account.\n\nTo enable it in a commercial project, please contact us.";
@@ -636,11 +637,11 @@
 "website_terms_and_conditions_url" = "https://www.linphone.org/en/terms-of-use";
 "website_translate_weblate_url" = "https://weblate.linphone.org/";
 "welcome_carousel_skip" = "Skip";
-"welcome_page_1_message" = "A **secured**, **open source** and **French** communication app.";
-"welcome_page_2_message" = "Your communications are safe thanks to our **end-to-end encryption**.";
-"welcome_page_2_title" = "Secured";
-"welcome_page_3_message" = "A **free** and open source application since **2001**.";
-"welcome_page_3_title" = "Open source";
+"welcome_page_1_message" = "Your **GippsHost business phone**, ready wherever you work.";
+"welcome_page_2_message" = "Securely connect using the setup QR code supplied in your GippsHost portal.";
+"welcome_page_2_title" = "Secure setup";
+"welcome_page_3_message" = "Make and receive calls using your existing GippsHost phone service.";
+"welcome_page_3_title" = "Ready to call";
 "welcome_page_subtitle" = "in %@";
 "welcome_page_title" = "Welcome";
 "You will change this mode later" = "You will change this mode later";

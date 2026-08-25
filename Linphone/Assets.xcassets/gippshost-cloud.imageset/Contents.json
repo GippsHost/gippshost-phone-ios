@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "gippshost-cloud.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -149,35 +149,23 @@ struct LoginFragment: View {
 					}
 
 					Spacer()
-					
-					Button {
-						withAnimation {
-							isShowHelpFragment = true
-						}
-					} label: {
-						HStack {
-							Image("question")
-								.renderingMode(.template)
-								.resizable()
-								.foregroundStyle(Color.grayMain2c500)
-								.frame(width: 20, height: 20)
-							
-							Text("help_title")
-								.foregroundStyle(Color.grayMain2c500)
-								.default_text_style_orange_600(styleSize: 15)
-								.frame(height: 35)
-						}
-						.padding(.horizontal, 20)
-					}
 				}
 
-				Text("assistant_account_login")
+				Text("gippshost_setup_title")
 					.default_text_style_800(styleSize: 20)
 			}
 			.frame(width: geometry.size.width)
 			.padding(.top, 10)
 			.padding(.bottom, 20)
 			
+			Image("gippshost-cloud")
+				.renderingMode(.template)
+				.resizable()
+				.scaledToFit()
+				.foregroundStyle(Color.orangeMain500)
+				.frame(width: 72, height: 52)
+				.padding(.bottom, 12)
+
 			VStack(alignment: .leading) {
 				Text(String(localized: "username")+"*")
 					.default_text_style_700(styleSize: 15)
@@ -257,18 +245,6 @@ struct LoginFragment: View {
 				.disabled(accountLoginViewModel.username.isEmpty || accountLoginViewModel.passwd.isEmpty)
 				.padding(.bottom)
 				
-				NavigationLink(destination: {
-					RecoverAccountFragment()
-				}, label: {
-					Text(String(localized: "assistant_forgotten_password"))
-						.underline()
-						.tint(Color.grayMain2c600)
-						.default_text_style_600(styleSize: 15)
-						.foregroundStyle(Color.grayMain2c500)
-				})
-				.frame(maxWidth: .infinity)
-				.padding(.bottom, 30)
-				
 				HStack {
 					VStack {
 						Divider()
@@ -308,85 +284,16 @@ struct LoginFragment: View {
 						.stroke(Color.orangeMain500, lineWidth: 1)
 				)
 				.padding(.bottom)
-				
-				NavigationLink(isActive: $isLinkSIPActive, destination: {
-					ThirdPartySipAccountWarningFragment(accountLoginViewModel: accountLoginViewModel)
-				}, label: {
-					Text("assistant_login_third_party_sip_account")
-						.default_text_style_orange_600(styleSize: 20)
-						.frame(height: 35)
-						.frame(maxWidth: .infinity)
-					
-				})
-				.disabled(!SharedMainViewModel.shared.generalTermsAccepted)
-				.padding(.horizontal, 20)
-				.padding(.vertical, 10)
-				.cornerRadius(60)
-				.overlay(
-					RoundedRectangle(cornerRadius: 60)
-						.inset(by: 0.5)
-						.stroke(Color.orangeMain500, lineWidth: 1)
-				)
-				.padding(.bottom)
-				.simultaneousGesture(
-					TapGesture().onEnded {
-						self.linkActive = "SIP"
-						if !SharedMainViewModel.shared.generalTermsAccepted {
-							withAnimation {
-								self.isShowPopup.toggle()
-							}
-						} else {
-							self.isLinkSIPActive = true
-						}
-					}
-				)
 			}
 			.frame(maxWidth: SharedMainViewModel.shared.maxWidth)
 			.padding(.horizontal, 20)
 			
 			Spacer()
 			
-			HStack(alignment: .center) {
-				
-				Spacer()
-				
-				Text("assistant_no_account_yet")
-					.default_text_style(styleSize: 15)
-					.foregroundStyle(Color.grayMain2c700)
-					.padding(.horizontal, 10)
-				
-				NavigationLink(destination: RegisterFragment(), isActive: $isLinkREGActive, label: { Text("assistant_account_register")
-						.default_text_style_white_600(styleSize: 20)
-						.frame(height: 35)
-				})
-				.disabled(!SharedMainViewModel.shared.generalTermsAccepted)
-				.padding(.horizontal, 20)
-				.padding(.vertical, 10)
-				.background(Color.orangeMain500)
-				.cornerRadius(60)
-				.padding(.horizontal, 10)
-				.simultaneousGesture(
-					TapGesture().onEnded {
-						self.linkActive = "REG"
-						if !SharedMainViewModel.shared.generalTermsAccepted {
-							withAnimation {
-								self.isShowPopup.toggle()
-							}
-						} else {
-							self.isLinkREGActive = true
-						}
-					}
-				)
-				
-				Spacer()
-			}
-			.padding(.bottom)
-			
-			Image("mountain2")
-				.resizable()
-				.scaledToFill()
-				.frame(width: geometry.size.width, height: 60)
-				.clipped()
+			Text("GippsHost customers only • gippshost.com.au")
+				.default_text_style(styleSize: 13)
+				.foregroundStyle(Color.grayMain2c500)
+				.padding(.bottom, 24)
 		}
 		.frame(minHeight: geometry.size.height)
 		.padding(.bottom, keyboard.currentHeight)

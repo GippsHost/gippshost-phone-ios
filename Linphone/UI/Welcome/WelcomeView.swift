@@ -143,11 +143,8 @@ struct WelcomeView: View {
 				.frame(maxWidth: SharedMainViewModel.shared.maxWidth)
 			}
 			
-			Image("mountain2")
-				.resizable()
-				.scaledToFill()
-				.frame(width: geometry.size.width, height: 60)
-				.clipped()
+			Color.orangeMain500
+				.frame(width: geometry.size.width, height: 8)
 		}
 		.frame(minHeight: geometry.size.height)
 		.onAppear {
