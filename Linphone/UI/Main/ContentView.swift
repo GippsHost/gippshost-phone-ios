@@ -49,14 +49,14 @@ struct ContentView: View {
 	@State private var text = ""
 	@FocusState private var focusedField: Bool
 	
-	@State private var showingDialer = false
+	@State private var showingDialer = true
 	@State var isMenuOpen = false
 	@State var isShowDeleteContactPopup = false
 	@State var isShowDeleteAllHistoryPopup = false
 	@State var isShowEditContactFragment = false
 	@State var isShowEditContactFragmentInContactDetails = false
 	@State var isShowEditContactFragmentAddress = ""
-	@State var isShowStartCallFragment = false
+	@State var isShowStartCallFragment = true
 	@State var isShowStartConversationFragment = false
 	@State var isShowDismissPopup = false
 	@State var isShowDeleteMeetingNotificationPopup = false
