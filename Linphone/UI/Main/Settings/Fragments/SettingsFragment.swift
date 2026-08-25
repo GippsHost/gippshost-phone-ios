@@ -18,6 +18,7 @@ struct SettingsFragment: View {
 					header
 					ScrollView {
 						VStack(spacing: 20) {
+							if !phoneNumber.isEmpty { phoneAccountCard }
 							doNotDisturbCard
 							permissionsCard
 							aboutCard
@@ -35,6 +36,24 @@ struct SettingsFragment: View {
 		}
 		.navigationViewStyle(StackNavigationViewStyle())
 		.onAppear(perform: refreshPermissionSummary)
+	}
+
+	private var phoneAccountCard: some View {
+		VStack(alignment: .leading, spacing: 12) {
+			Text("Your phone").default_text_style_800(styleSize: 18)
+			if !accountName.isEmpty {
+				Text(accountName)
+					.default_text_style_700(styleSize: 16)
+					.frame(maxWidth: .infinity, alignment: .leading)
+			}
+			HStack(spacing: 10) {
+				Image(systemName: "phone.fill")
+					.foregroundStyle(Color.orangeMain500)
+				Text(formattedPhoneNumber)
+					.default_text_style(styleSize: 16)
+			}
+		}
+		.padding(20).background(.white).cornerRadius(15).padding(.horizontal)
 	}
 
 	private var header: some View {
@@ -153,6 +172,30 @@ struct SettingsFragment: View {
 		let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
 		let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""
 		return build.isEmpty ? version : "\(version) (\(build))"
+	}
+
+	private var accountName: String {
+		let configured = AppServices.config.getString(section: "gippshost", key: "account_name", defaultString: "")
+		if !configured.isEmpty { return configured }
+		return CoreContext.shared.accounts.first?.displayNameAvatar ?? ""
+	}
+
+	private var phoneNumber: String {
+		AppServices.config.getString(section: "gippshost", key: "phone_number", defaultString: "")
+	}
+
+	private var formattedPhoneNumber: String {
+		var digits = phoneNumber.filter(\.isNumber)
+		if digits.hasPrefix("61") && digits.count == 11 {
+			digits = "0" + String(digits.dropFirst(2))
+		}
+		if digits.count == 10 {
+			let first = digits.prefix(2)
+			let middle = digits.dropFirst(2).prefix(4)
+			let last = digits.suffix(4)
+			return "\(first) \(middle) \(last)"
+		}
+		return phoneNumber
 	}
 
 	private func refreshPermissionSummary() {
