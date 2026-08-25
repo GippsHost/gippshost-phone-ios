@@ -95,23 +95,6 @@ struct BottomSheetContent: View {
                     .cornerRadius(40)
                     
                     Button {
-                        callViewModel.togglePause()
-                    } label: {
-                        HStack {
-                            Image(callViewModel.isPaused ? "play" : "pause")
-                                .renderingMode(.template)
-                                .resizable()
-                                .foregroundStyle(.white)
-                                .frame(width: 32, height: 32)
-                        }
-                    }
-                    .buttonStyle(PressedButtonStyle(buttonSize: buttonSize))
-                    .frame(width: buttonSize, height: buttonSize)
-                    .background(callViewModel.isPaused ? Color.greenSuccess500 : Color.gray500)
-                    .cornerRadius(40)
-                    .disabled(telecomManager.isPausedByRemote || !telecomManager.callConnected)
-                    
-                    Button {
                         callViewModel.toggleMuteMicrophone()
                     } label: {
                         HStack {
@@ -481,7 +464,7 @@ struct BottomSheetContent: View {
 									.cornerRadius(40)
 									.disabled(telecomManager.isPausedByRemote)
 									
-									Text("call_action_pause_call")
+									Text("Hold")
 										.foregroundStyle(.white)
 										.default_text_style(styleSize: 15)
 								}
@@ -493,69 +476,6 @@ struct BottomSheetContent: View {
 								}
 							}
 							.frame(width: basePortraitSize, height: buttonPortraitDimension)
-							
-							if callViewModel.isOneOneCall {
-								ZStack {
-									VStack {
-										Button {
-											callViewModel.toggleRecording()
-										} label: {
-											HStack {
-												Image("record-fill")
-													.renderingMode(.template)
-													.resizable()
-													.foregroundStyle(.white)
-													.frame(width: 32, height: 32)
-											}
-										}
-										.buttonStyle(PressedButtonStyle(buttonSize: buttonSize))
-										.frame(width: buttonSize, height: buttonSize)
-										.background(callViewModel.isRecording ? Color.redDanger500 : Color.gray500)
-										.cornerRadius(40)
-										.disabled(AppServices.corePreferences.disableCallRecordings || callViewModel.isPaused || telecomManager.isPausedByRemote)
-										
-										Text("call_action_record_call")
-											.foregroundStyle(.white)
-											.default_text_style(styleSize: 15)
-									}
-									.frame(width: basePortraitSize, height: buttonPortraitDimension)
-									
-									if AppServices.corePreferences.disableCallRecordings || callViewModel.isPaused || telecomManager.isPausedByRemote {
-										Color.gray600.opacity(0.8)
-											.allowsHitTesting(false)
-									}
-								}
-								.frame(width: basePortraitSize, height: buttonPortraitDimension)
-							} else {
-								ZStack {
-									VStack {
-										Button {
-										} label: {
-											HStack {
-												Image("record-fill")
-													.renderingMode(.template)
-													.resizable()
-													.foregroundStyle(.white)
-													.frame(width: 32, height: 32)
-											}
-										}
-										.buttonStyle(PressedButtonStyle(buttonSize: buttonSize))
-										.frame(width: buttonSize, height: buttonSize)
-										.background(Color.gray500)
-										.cornerRadius(40)
-										.disabled(true)
-										
-										Text("call_action_record_call")
-											.foregroundStyle(.white)
-											.default_text_style(styleSize: 15)
-									}
-									.frame(width: basePortraitSize, height: buttonPortraitDimension)
-									
-									Color.gray600.opacity(0.8)
-										.allowsHitTesting(false)
-								}
-								.frame(width: basePortraitSize, height: buttonPortraitDimension)
-							}
 							
 							VStack {
 								Button {
@@ -902,7 +822,7 @@ struct BottomSheetContent: View {
 									.cornerRadius(40)
 									.disabled(telecomManager.isPausedByRemote)
 									
-									Text("call_action_pause_call")
+									Text("Hold")
 										.foregroundStyle(.white)
 										.default_text_style(styleSize: 15)
 								}
@@ -915,70 +835,6 @@ struct BottomSheetContent: View {
 							}
 							.frame(width: baseLandscapeSize, height: buttonLandscapeDimension)
 							
-							if callViewModel.isOneOneCall {
-								ZStack {
-									VStack {
-										Button {
-											callViewModel.toggleRecording()
-										} label: {
-											HStack {
-												Image("record-fill")
-													.renderingMode(.template)
-													.resizable()
-													.foregroundStyle(.white)
-													.frame(width: 32, height: 32)
-											}
-										}
-										.buttonStyle(PressedButtonStyle(buttonSize: buttonSize))
-										.frame(width: buttonSize, height: buttonSize)
-										.background(callViewModel.isRecording ? Color.redDanger500 : Color.gray500)
-										.cornerRadius(40)
-										.disabled(AppServices.corePreferences.disableCallRecordings || callViewModel.isPaused || telecomManager.isPausedByRemote)
-										
-										Text("call_action_record_call")
-											.foregroundStyle(.white)
-											.default_text_style(styleSize: 15)
-									}
-									.frame(width: baseLandscapeSize, height: buttonLandscapeDimension)
-									
-									if AppServices.corePreferences.disableCallRecordings || callViewModel.isPaused || telecomManager.isPausedByRemote {
-										Color.gray600.opacity(0.8)
-											.allowsHitTesting(false)
-									}
-								}
-								.frame(width: baseLandscapeSize, height: buttonLandscapeDimension)
-							} else {
-								ZStack {
-									VStack {
-										Button {
-										} label: {
-											HStack {
-												Image("record-fill")
-													.renderingMode(.template)
-													.resizable()
-													.foregroundStyle(Color.gray500)
-													.frame(width: 32, height: 32)
-											}
-										}
-										.buttonStyle(PressedButtonStyle(buttonSize: buttonSize))
-										.frame(width: buttonSize, height: buttonSize)
-										.background(.white)
-										.cornerRadius(40)
-										.disabled(true)
-										
-										Text("call_action_record_call")
-											.foregroundStyle(.white)
-											.default_text_style(styleSize: 15)
-									}
-									.frame(width: baseLandscapeSize, height: buttonLandscapeDimension)
-									
-									if true {
-										Color.gray600.opacity(0.8)
-											.allowsHitTesting(false)
-									}
-								}
-								.frame(width: baseLandscapeSize, height: buttonLandscapeDimension)
-							}
 						}
 						.padding(.horizontal, 20)
 					}
