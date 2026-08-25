@@ -243,7 +243,7 @@ class CoreContext: ObservableObject {
 			}
 			
 			for acc in self.mCore.accountList {
-				self.forceRemotePushToMatchVoipPushSettings(account: acc)
+				self.disableRemotePushForVoiceOnlyAccount(account: acc)
 			}
 			
 			let fm = FileManager.default
@@ -460,7 +460,7 @@ class CoreContext: ObservableObject {
 					ContactsManager.shared.fetchContacts()
 				}
 			}, onAccountAdded: { (_: Core, acc: Account) in
-				self.forceRemotePushToMatchVoipPushSettings(account: acc)
+				self.disableRemotePushForVoiceOnlyAccount(account: acc)
 				
 				var accountModels: [AccountModel] = []
 				for account in self.mCore.accountList {
@@ -563,11 +563,11 @@ class CoreContext: ObservableObject {
 		mCore.removeDelegate(delegate: delegate)
 	}
 	
-	func forceRemotePushToMatchVoipPushSettings(account: Account) {
-		if let params = account.params, params.pushNotificationAllowed && !params.remotePushNotificationAllowed {
-			Log.warn("account \(account.displayName()): VOIP and REMOTE push setting mismatch, force \(params.pushNotificationAllowed ? "enabling" : "disabling") of REMOTE Push")
+	func disableRemotePushForVoiceOnlyAccount(account: Account) {
+		if let params = account.params, params.remotePushNotificationAllowed {
+			Log.info("account \(account.displayName()): disabling unused remote message push; VoIP push remains enabled")
 			let newParams = params.clone()
-			newParams?.remotePushNotificationAllowed = params.pushNotificationAllowed
+			newParams?.remotePushNotificationAllowed = false
 			account.params = newParams
 		}
 	}

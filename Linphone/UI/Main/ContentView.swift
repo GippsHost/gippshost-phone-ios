@@ -1983,6 +1983,18 @@ struct ContentView: View {
 							.zIndex(3)
 							.transition(.opacity.combined(with: .move(edge: .bottom)))
 					}
+
+	#if targetEnvironment(simulator)
+					if telecomManager.callDisplayed
+						&& telecomManager.callInProgress
+						&& !telecomManager.outgoingCallStarted
+						&& !telecomManager.callConnected {
+						SimulatorIncomingCallView()
+							.environmentObject(callViewModel)
+							.zIndex(5)
+							.transition(.opacity)
+					}
+	#endif
 					
 					if telecomManager.callDisplayed && ((telecomManager.callInProgress && telecomManager.outgoingCallStarted) || telecomManager.callConnected) && !telecomManager.meetingWaitingRoomDisplayed {
 						CallView(
@@ -2380,6 +2392,96 @@ struct ConversationsContainer: View {
 		}
 	}
 }
+
+#if targetEnvironment(simulator)
+private struct SimulatorIncomingCallView: View {
+	@EnvironmentObject private var callViewModel: CallViewModel
+	@ObservedObject private var telecomManager = TelecomManager.shared
+
+	private var callerName: String {
+		if !telecomManager.incomingCallerName.isEmpty {
+			return telecomManager.incomingCallerName
+		}
+		if !callViewModel.displayName.isEmpty {
+			return callViewModel.displayName
+		}
+		if let displayName = callViewModel.currentCall?.remoteAddress?.displayName, !displayName.isEmpty {
+			return displayName
+		}
+		if let username = callViewModel.currentCall?.remoteAddress?.username, !username.isEmpty {
+			return username
+		}
+		return "Unknown caller"
+	}
+
+	var body: some View {
+		ZStack {
+			Color.black.ignoresSafeArea()
+
+			VStack(spacing: 18) {
+				Spacer()
+
+				Text("Incoming call")
+					.default_text_style_white(styleSize: 18)
+
+				Text(callerName)
+					.default_text_style_white_800(styleSize: 30)
+					.multilineTextAlignment(.center)
+					.padding(.horizontal, 24)
+
+				Image("phone")
+					.renderingMode(.template)
+					.resizable()
+					.scaledToFit()
+					.foregroundStyle(.white)
+					.frame(width: 68, height: 68)
+					.padding(42)
+					.background(Color.gray600)
+					.clipShape(Circle())
+
+				Spacer()
+
+				HStack(spacing: 70) {
+					callActionButton(
+						title: "Decline",
+						icon: "phone-disconnect",
+						color: Color.redDanger500,
+						action: callViewModel.terminateCall
+					)
+
+					callActionButton(
+						title: "Answer",
+						icon: "phone",
+						color: Color.greenSuccess500,
+						action: callViewModel.acceptCall
+					)
+				}
+				.padding(.bottom, 54)
+			}
+			.padding(.top, 40)
+		}
+	}
+
+	private func callActionButton(title: String, icon: String, color: Color, action: @escaping () -> Void) -> some View {
+		Button(action: action) {
+			VStack(spacing: 10) {
+				Image(icon)
+					.renderingMode(.template)
+					.resizable()
+					.scaledToFit()
+					.foregroundStyle(.white)
+					.frame(width: 32, height: 32)
+					.frame(width: 72, height: 72)
+					.background(color)
+					.clipShape(Circle())
+
+				Text(title)
+					.default_text_style_white_700(styleSize: 15)
+			}
+		}
+	}
+}
+#endif
 
 struct MeetingsContainer: View {
 	@Binding var meetingsListViewModel: MeetingsListViewModel?

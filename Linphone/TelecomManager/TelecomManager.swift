@@ -52,6 +52,7 @@ class TelecomManager: ObservableObject {
 	@Published var refreshCallViewModel: Bool = false
 	@Published var remainingCall: Bool = false
 	@Published var callConnected: Bool = false
+	@Published var incomingCallerName: String = ""
 	@Published var meetingWaitingRoomDisplayed: Bool = false
 	@Published var meetingWaitingRoomSelected: Address?
 	@Published var meetingWaitingRoomName: String = ""
@@ -573,6 +574,9 @@ class TelecomManager: ObservableObject {
 				let addr = call.remoteAddress
 				incomingDisplayName(call: call) { displayNameResult in
 					let displayName = displayNameResult
+					DispatchQueue.main.async {
+						self.incomingCallerName = displayName
+					}
 	#if targetEnvironment(simulator)
 					DispatchQueue.main.async {
 						self.outgoingCallStarted = false

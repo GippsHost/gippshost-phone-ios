@@ -117,7 +117,7 @@ class AccountSettingsViewModel: ObservableObject {
 			
 			if let newParams = self.accountModel.account.params?.clone() {
 				newParams.pushNotificationAllowed = self.pushNotification
-				newParams.remotePushNotificationAllowed = self.pushNotification
+				newParams.remotePushNotificationAllowed = false
 				
 				newParams.instantMessagingEncryptionMandatory = self.imEncryptionMandatory
 				

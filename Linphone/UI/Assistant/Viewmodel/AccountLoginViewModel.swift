@@ -137,7 +137,7 @@ class AccountLoginViewModel: ObservableObject {
 				
 				if accountParams.pushNotificationAllowed {
 					accountParams.pushNotificationAllowed = true
-					accountParams.remotePushNotificationAllowed = true
+					accountParams.remotePushNotificationAllowed = false
 				}
 #if DEBUG
 				let pushEnvironment = ".dev"
