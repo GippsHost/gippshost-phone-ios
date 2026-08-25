@@ -425,6 +425,11 @@ struct CallView: View {
 				
 				simpleCallView(geometry: geometry, minBottomSheetHeight: minBottomSheetHeight, isLandscape: isLandscape, topBarCallCounter: topBarCallCounter)
 					.background(Color.gray900)
+					.onTapGesture {
+						if showingDialer {
+							showingDialer = false
+						}
+					}
 					.safeAreaInset(edge: .bottom) {
 						if !fullscreenVideo || (fullscreenVideo && telecomManager.isPausedByRemote) {
 							Color.clear.frame(height: minHeight)

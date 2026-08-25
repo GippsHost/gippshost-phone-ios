@@ -878,43 +878,52 @@ struct BottomSheetView<Content: View>: View {
 	
 	var body: some View {
 		GeometryReader { geometry in
-			VStack(spacing: 0.0) {
-				content
-			}
-			.frame(
-				width: geometry.size.width,
-				height: maxHeight,
-				alignment: .top
-			)
-			.clipShape(
-				Path(
-					UIBezierPath(
-						roundedRect: CGRect(x: 0.0, y: 0.0, width: geometry.size.width, height: maxHeight),
-						byRoundingCorners: [.topLeft, .topRight],
-						cornerRadii: CGSize(width: 16.0, height: 16.0)
-					)
-					.cgPath
+			ZStack(alignment: .bottom) {
+				if currentOffset > minHeight {
+					Color.clear
+						.contentShape(Rectangle())
+						.onTapGesture {
+							withAnimation {
+								currentOffset = minHeight
+								pointingUp = 1
+							}
+						}
+				}
+
+				VStack(spacing: 0.0) {
+					content
+				}
+				.frame(
+					width: geometry.size.width,
+					height: maxHeight,
+					alignment: .top
 				)
-			)
-			.frame(
-				height: geometry.size.height,
-				alignment: .bottom
-			)
-			.highPriorityGesture(
-				DragGesture()
-					.onChanged { value in
-						currentOffset -= value.translation.height
-						currentOffset = min(max(currentOffset, minHeight), maxHeight)
-						pointingUp = -(((currentOffset - minHeight) / (maxHeight - minHeight)) - 0.5) * 2
-					}
-					.onEnded { _ in
-						withAnimation {
-							currentOffset = (currentOffset - minHeight <= maxHeight - currentOffset) ? minHeight : maxHeight
+				.clipShape(
+					Path(
+						UIBezierPath(
+							roundedRect: CGRect(x: 0.0, y: 0.0, width: geometry.size.width, height: maxHeight),
+							byRoundingCorners: [.topLeft, .topRight],
+							cornerRadii: CGSize(width: 16.0, height: 16.0)
+						)
+						.cgPath
+					)
+				)
+				.highPriorityGesture(
+					DragGesture()
+						.onChanged { value in
+							currentOffset -= value.translation.height
+							currentOffset = min(max(currentOffset, minHeight), maxHeight)
 							pointingUp = -(((currentOffset - minHeight) / (maxHeight - minHeight)) - 0.5) * 2
 						}
-					}
-			)
-			.offset(y: maxHeight - currentOffset)
+						.onEnded { _ in
+							withAnimation {
+								currentOffset = (currentOffset - minHeight <= maxHeight - currentOffset) ? minHeight : maxHeight
+								pointingUp = -(((currentOffset - minHeight) / (maxHeight - minHeight)) - 0.5) * 2
+							}
+						}
+				)
+				.offset(y: maxHeight - currentOffset)
+			}
 		}
 	}
 }
