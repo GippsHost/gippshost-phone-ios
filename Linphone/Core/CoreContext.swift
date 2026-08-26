@@ -130,7 +130,10 @@ class CoreContext: ObservableObject {
 		core.videoCaptureEnabled = false
 		core.videoDisplayEnabled = false
 		core.fecEnabled = false
-		try? core.setMediaencryption(newValue: .None)
+		// Encrypt media between GippsHost Phone and the GippsHost voice platform
+		// whenever the far end supports SDES-SRTP. Keep this non-mandatory so calls
+		// to legacy or carrier endpoints still complete instead of failing outright.
+		try? core.setMediaencryption(newValue: .SRTP)
 		core.mediaEncryptionMandatory = false
 		core.wifiOnlyEnabled = false
 		core.ipv6Enabled = true

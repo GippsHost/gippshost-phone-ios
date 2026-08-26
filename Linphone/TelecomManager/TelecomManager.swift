@@ -606,6 +606,21 @@ class TelecomManager: ObservableObject {
 				}
 			case .StreamsRunning:
 				if TelecomManager.callKitEnabled(core: core) {
+					// CallKit occasionally omits didActivate for consecutive outgoing
+					// calls. RTP is then received but liblinphone never opens the iOS
+					// playback path. Give CallKit a moment, then activate only if its
+					// delegate still has not confirmed the audio session.
+					if call.dir == .Outgoing && callkitAudioSessionActivated != true {
+						DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+							CoreContext.shared.doOnCoreQueue { core in
+								guard core.currentCall?.state == .StreamsRunning,
+									  self.callkitAudioSessionActivated != true else { return }
+								Log.info("CallKit: activating missing outgoing audio session fallback.")
+								core.activateAudioSession(activated: true)
+								self.callkitAudioSessionActivated = true
+							}
+						}
+					}
 					
 					DispatchQueue.main.async {
 						self.outgoingCallStarted = false

@@ -333,6 +333,10 @@ extension ProviderDelegate: CXProviderDelegate {
 		} else {
 			CoreContext.shared.doOnCoreQueue { core in
 				do {
+					// A previous outgoing call does not always produce a matching
+					// didDeactivate callback before the next call begins. Reset our
+					// CallKit state so liblinphone configures a fresh audio session.
+					TelecomManager.shared.callkitAudioSessionActivated = false
 					core.configureAudioSession()
 					try TelecomManager.shared.doCall(core: core, addr: addr!, isSas: callInfo?.sasEnabled ?? false, isVideo: callInfo?.videoEnabled ?? false, isConference: callInfo?.isConference ?? false)
 					action.fulfill()
