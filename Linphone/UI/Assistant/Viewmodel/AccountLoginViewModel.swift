@@ -31,7 +31,7 @@ class AccountLoginViewModel: ObservableObject {
 	@Published var transportType: String = "TCP"
 	@Published var authId: String = ""
 	@Published var sipProxyUrl: String = ""
-	@Published var outboundProxy: String = "voice.gippshost.com.au:5062"
+	@Published var outboundProxy: String = ""
 	
 	private var mCoreDelegate: CoreDelegate!
 	
@@ -115,7 +115,7 @@ class AccountLoginViewModel: ObservableObject {
 					let server = self.sipProxyUrl.starts(with: "sip:") ? self.sipProxyUrl : String("sip:" + self.sipProxyUrl)
 					serverAddress = try Factory.Instance.createAddress(addr: server)
 				} else {
-					serverAddress = try Factory.Instance.createAddress(addr: String("sip:" + self.domain))
+					serverAddress = try Factory.Instance.createAddress(addr: "sip:voice.gippshost.com.au:5062")
 				}
 				
 				// We use the Address object to easily set the transport protocol
@@ -178,7 +178,7 @@ class AccountLoginViewModel: ObservableObject {
 					self.domain = "voice.gippshost.com.au"
 					self.transportType = "TCP"
 					self.authId = ""
-					self.outboundProxy = "voice.gippshost.com.au:5062"
+					self.outboundProxy = ""
 				}
 				
 			} catch { NSLog(error.localizedDescription) }

@@ -157,18 +157,20 @@ class CoreContext: ObservableObject {
 			  AccountLoginViewModel.isAllowedVoiceDomain(domain) else { return }
 
 		let expectedProxy = "voice.gippshost.com.au:5062"
-		let currentProxy = params.routesAddresses.first?.asStringUriOnly() ?? ""
-		let needsRouteUpdate = !currentProxy.contains(expectedProxy) ||
-			params.routesAddresses.first?.transport != .Tcp
+		let currentServer = params.serverAddress?.asStringUriOnly() ?? ""
+		let needsServerUpdate = !currentServer.contains(expectedProxy) ||
+			params.serverAddress?.transport != .Tcp
+		let needsRouteUpdate = !params.routesAddresses.isEmpty
 		let needsPushUpdate = !params.pushNotificationAllowed || params.remotePushNotificationAllowed
-		guard needsRouteUpdate || needsPushUpdate else { return }
+		guard needsServerUpdate || needsRouteUpdate || needsPushUpdate else { return }
 
 		guard let newParams = params.clone() else { return }
-		if needsRouteUpdate,
+		if needsServerUpdate,
 		   let proxyAddress = try? Factory.Instance.createAddress(addr: "sip:\(expectedProxy)") {
 			try? proxyAddress.setTransport(newValue: .Tcp)
-			try? newParams.setRoutesaddresses(newValue: [proxyAddress])
+			try? newParams.setServeraddress(newValue: proxyAddress)
 		}
+		try? newParams.setRoutesaddresses(newValue: [])
 		newParams.pushNotificationAllowed = true
 		newParams.remotePushNotificationAllowed = false
 		account.params = newParams
