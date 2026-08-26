@@ -28,6 +28,7 @@ automatically_accept_direction=2 #receive only
 
 [app]
 tunnel=disabled
+team_id=UNX3DH28B3
 auto_download_incoming_voice_recordings=1
 auto_download_incoming_icalendars=1
 

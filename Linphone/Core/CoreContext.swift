@@ -157,11 +157,20 @@ class CoreContext: ObservableObject {
 			  AccountLoginViewModel.isAllowedVoiceDomain(domain) else { return }
 
 		let expectedProxy = "voice.gippshost.com.au:5062"
+		let expectedPushParam = "UNX3DH28B3.au.com.gippshost.phone.voip"
+#if DEBUG
+		let expectedPushProvider = "apns.dev"
+#else
+		let expectedPushProvider = "apns"
+#endif
 		let currentServer = params.serverAddress?.asStringUriOnly() ?? ""
 		let needsServerUpdate = !currentServer.contains(expectedProxy) ||
 			params.serverAddress?.transport != .Tcp
 		let needsRouteUpdate = !params.routesAddresses.isEmpty
-		let needsPushUpdate = !params.pushNotificationAllowed || params.remotePushNotificationAllowed
+		let needsPushUpdate = !params.pushNotificationAllowed ||
+			params.remotePushNotificationAllowed ||
+			params.pushNotificationConfig?.provider != expectedPushProvider ||
+			params.pushNotificationConfig?.param != expectedPushParam
 		guard needsServerUpdate || needsRouteUpdate || needsPushUpdate else { return }
 
 		guard let newParams = params.clone() else { return }
@@ -173,6 +182,8 @@ class CoreContext: ObservableObject {
 		try? newParams.setRoutesaddresses(newValue: [])
 		newParams.pushNotificationAllowed = true
 		newParams.remotePushNotificationAllowed = false
+		newParams.pushNotificationConfig?.provider = expectedPushProvider
+		newParams.pushNotificationConfig?.param = expectedPushParam
 		account.params = newParams
 		Log.info("[CoreContext] Applied GippsHost PushKit gateway to \(account.displayName())")
 	}
