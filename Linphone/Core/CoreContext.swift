@@ -133,6 +133,9 @@ class CoreContext: ObservableObject {
 		// Encrypt media between GippsHost Phone and the GippsHost voice platform
 		// whenever the far end supports SDES-SRTP. Keep this non-mandatory so calls
 		// to legacy or carrier endpoints still complete instead of failing outright.
+		// FusionPBX accepts AES-CM while its current secure-media policy rejects the
+		// AEAD-GCM suite that liblinphone otherwise advertises first.
+		core.srtpCryptoSuites = "AES_CM_128_HMAC_SHA1_80"
 		try? core.setMediaencryption(newValue: .SRTP)
 		core.mediaEncryptionMandatory = false
 		core.wifiOnlyEnabled = false
