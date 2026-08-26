@@ -142,8 +142,15 @@ class CoreContext: ObservableObject {
 		core.ipv6Enabled = true
 
 		let enabledAudioCodecs = Set(["G722", "PCMU", "PCMA"])
-		for payload in core.audioPayloadTypes {
+		let audioPayloads = core.audioPayloadTypes
+		for payload in audioPayloads {
 			payload.enable(enabled: enabledAudioCodecs.contains(payload.mimeType.uppercased()))
+		}
+		let codecPreference = ["G722", "PCMU", "PCMA"]
+		core.audioPayloadTypes = audioPayloads.sorted { left, right in
+			let leftRank = codecPreference.firstIndex(of: left.mimeType.uppercased()) ?? codecPreference.count
+			let rightRank = codecPreference.firstIndex(of: right.mimeType.uppercased()) ?? codecPreference.count
+			return leftRank < rightRank
 		}
 		for payload in core.videoPayloadTypes {
 			payload.enable(enabled: false)
@@ -157,7 +164,7 @@ class CoreContext: ObservableObject {
 	/// All GippsHost Phone accounts register through the dedicated Flexisip
 	/// gateway so incoming calls can wake a suspended iOS app through PushKit.
 	/// The FusionPBX registrar and SIP credentials remain unchanged.
-	private func applyGippsHostPushGateway(account: Account) {
+	private func applyGippsHostPushGateway(core: Core, account: Account) {
 		guard let params = account.params,
 			  let domain = params.identityAddress?.domain,
 			  AccountLoginViewModel.isAllowedVoiceDomain(domain) else { return }
@@ -179,7 +186,8 @@ class CoreContext: ObservableObject {
 			params.pushNotificationConfig?.teamId != "UNX3DH28B3" ||
 			params.pushNotificationConfig?.bundleIdentifier != "au.com.gippshost.phone" ||
 			params.pushNotificationConfig?.param != expectedPushParam
-		guard needsServerUpdate || needsRouteUpdate || needsPushUpdate else { return }
+		let needsIceUpdate = params.natPolicy?.iceEnabled != true
+		guard needsServerUpdate || needsRouteUpdate || needsPushUpdate || needsIceUpdate else { return }
 
 		guard let newParams = params.clone() else { return }
 		if needsServerUpdate,
@@ -194,8 +202,13 @@ class CoreContext: ObservableObject {
 		newParams.pushNotificationConfig?.teamId = "UNX3DH28B3"
 		newParams.pushNotificationConfig?.bundleIdentifier = "au.com.gippshost.phone"
 		newParams.pushNotificationConfig?.param = expectedPushParam
+		if needsIceUpdate {
+			let natPolicy = params.natPolicy ?? (try? core.createNatPolicy())
+			natPolicy?.iceEnabled = true
+			newParams.natPolicy = natPolicy
+		}
 		account.params = newParams
-		Log.info("[CoreContext] Applied GippsHost PushKit gateway to \(account.displayName())")
+		Log.info("[CoreContext] Applied GippsHost PushKit gateway and ICE media policy to \(account.displayName())")
 	}
 	
 	func doOnCoreQueueCoreStarted(synchronous: Bool = false, lambda: @escaping (Core) -> Void) {
@@ -370,7 +383,7 @@ class CoreContext: ObservableObject {
 					let pushEnvironment = ""
 #endif
 					for account in core.accountList {
-						self.applyGippsHostPushGateway(account: account)
+						self.applyGippsHostPushGateway(core: core, account: account)
 						if account.params?.pushNotificationConfig?.provider != ("apns" + pushEnvironment) {
 							let newParams = account.params?.clone()
 							
@@ -540,8 +553,8 @@ class CoreContext: ObservableObject {
 					
 					ContactsManager.shared.fetchContacts()
 				}
-			}, onAccountAdded: { (_: Core, acc: Account) in
-				self.applyGippsHostPushGateway(account: acc)
+			}, onAccountAdded: { (core: Core, acc: Account) in
+				self.applyGippsHostPushGateway(core: core, account: acc)
 				self.disableRemotePushForVoiceOnlyAccount(account: acc)
 				
 				var accountModels: [AccountModel] = []
