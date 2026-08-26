@@ -143,6 +143,8 @@ class AccountLoginViewModel: ObservableObject {
 				let pushEnvironment = ""
 #endif
 				accountParams.pushNotificationConfig?.provider = "apns" + pushEnvironment
+				accountParams.pushNotificationConfig?.teamId = "UNX3DH28B3"
+				accountParams.pushNotificationConfig?.bundleIdentifier = "au.com.gippshost.phone"
 				accountParams.pushNotificationConfig?.param = "UNX3DH28B3.au.com.gippshost.phone.voip"
 				
 				self.mCoreDelegate = CoreDelegateStub(onAccountRegistrationStateChanged: { (core: Core, account: Account, state: RegistrationState, message: String) in

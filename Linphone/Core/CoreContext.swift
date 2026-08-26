@@ -170,6 +170,8 @@ class CoreContext: ObservableObject {
 		let needsPushUpdate = !params.pushNotificationAllowed ||
 			params.remotePushNotificationAllowed ||
 			params.pushNotificationConfig?.provider != expectedPushProvider ||
+			params.pushNotificationConfig?.teamId != "UNX3DH28B3" ||
+			params.pushNotificationConfig?.bundleIdentifier != "au.com.gippshost.phone" ||
 			params.pushNotificationConfig?.param != expectedPushParam
 		guard needsServerUpdate || needsRouteUpdate || needsPushUpdate else { return }
 
@@ -183,6 +185,8 @@ class CoreContext: ObservableObject {
 		newParams.pushNotificationAllowed = true
 		newParams.remotePushNotificationAllowed = false
 		newParams.pushNotificationConfig?.provider = expectedPushProvider
+		newParams.pushNotificationConfig?.teamId = "UNX3DH28B3"
+		newParams.pushNotificationConfig?.bundleIdentifier = "au.com.gippshost.phone"
 		newParams.pushNotificationConfig?.param = expectedPushParam
 		account.params = newParams
 		Log.info("[CoreContext] Applied GippsHost PushKit gateway to \(account.displayName())")
@@ -245,6 +249,10 @@ class CoreContext: ObservableObject {
 			Factory.Instance.enableLogCollection(state: LogCollectionState.Enabled)
 
 			MDMManager.shared.loadXMLConfigFromMdm(config: AppServices.config)
+			// Liblinphone uses this value when it regenerates pn-param after the
+			// PushKit token arrives. Set it for existing installations as well as
+			// fresh installs before the shared core is created.
+			AppServices.config.setString(section: "app", key: "team_id", value: "UNX3DH28B3")
 
 			self.mCore = try? Factory.Instance.createSharedCoreWithConfig(config: AppServices.config, systemContext: Unmanaged.passUnretained(coreQueue).toOpaque(), appGroupId: SharedMainViewModel.appGroupName, mainCore: true)
 
