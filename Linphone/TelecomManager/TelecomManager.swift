@@ -108,8 +108,9 @@ class TelecomManager: ObservableObject {
 
 		if TelecomManager.callKitEnabled(core: core) {// && !nextCallIsTransfer != true {
 			let uuid = UUID()
-			let name = addr?.asStringUriOnly() ?? "Unknown"
-			let handle = CXHandle(type: .generic, value: addr?.asStringUriOnly() ?? "")
+			let handleValue = callKitHandle(address: addr)
+			let name = addr?.displayName ?? handleValue
+			let handle = CXHandle(type: .generic, value: handleValue)
 			let startCallAction = CXStartCallAction(call: uuid, handle: handle)
 			let transaction = CXTransaction(action: startCallAction)
 			
@@ -367,9 +368,9 @@ class TelecomManager: ObservableObject {
 		providerDelegate.reportIncomingCall(call: call, uuid: uuid, handle: handle, hasVideo: hasVideo, displayName: displayName)
 	}
 
-	/// CallKit persists this value in the iPhone Recents list. Keep it to the
-	/// dialable SIP username instead of exposing the customer's PBX domain.
-	func incomingCallHandle(address: Address?) -> String {
+	/// CallKit persists this value in the iPhone Recents list. Keep incoming and
+	/// outgoing entries to the dialable SIP username instead of exposing the PBX.
+	func callKitHandle(address: Address?) -> String {
 		if let username = address?.username, !username.isEmpty {
 			return username
 		}
@@ -603,7 +604,7 @@ class TelecomManager: ObservableObject {
 			switch cstate {
 			case .IncomingReceived:
 				let addr = call.remoteAddress
-				let callKitHandle = incomingCallHandle(address: addr)
+				let callKitHandleValue = callKitHandle(address: addr)
 				incomingDisplayName(call: call) { displayNameResult in
 					let displayName = displayNameResult
 					DispatchQueue.main.async {
@@ -627,12 +628,12 @@ class TelecomManager: ObservableObject {
 						
 						if uuid != nil {
 							// Tha app is now registered, updated the call already existed.
-							self.providerDelegate.updateCall(uuid: uuid!, handle: callKitHandle, hasVideo: self.remoteConfVideo, displayName: displayName)
+							self.providerDelegate.updateCall(uuid: uuid!, handle: callKitHandleValue, hasVideo: self.remoteConfVideo, displayName: displayName)
 						} else {
 							let videoEnabled = call.remoteParams?.videoEnabled ?? false
 							let isConference = call.callLog?.wasConference() ?? false
 							let videoDir = call.remoteParams?.videoDirection != MediaDirection.Inactive
-							self.displayIncomingCall(call: call, handle: callKitHandle, hasVideo: videoEnabled && videoDir && !isConference, callId: callId, displayName: displayName)
+							self.displayIncomingCall(call: call, handle: callKitHandleValue, hasVideo: videoEnabled && videoDir && !isConference, callId: callId, displayName: displayName)
 						}
 					}
 				}
