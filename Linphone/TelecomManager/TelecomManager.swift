@@ -359,6 +359,18 @@ class TelecomManager: ObservableObject {
 		providerDelegate.uuids.updateValue(uuid, forKey: callId)
 		providerDelegate.reportIncomingCall(call: call, uuid: uuid, handle: handle, hasVideo: hasVideo, displayName: displayName)
 	}
+
+	/// CallKit persists this value in the iPhone Recents list. Keep it to the
+	/// dialable SIP username instead of exposing the customer's PBX domain.
+	func incomingCallHandle(address: Address?) -> String {
+		if let username = address?.username, !username.isEmpty {
+			return username
+		}
+		if let uri = address?.asStringUriOnly(), uri.hasPrefix("sip:") {
+			return String(uri.dropFirst(4).split(separator: "@", maxSplits: 1).first ?? "Unknown")
+		}
+		return address?.asStringUriOnly() ?? "Unknown"
+	}
 	
 	func incomingDisplayName(call: Call, completion: @escaping (String) -> Void) {
 		CoreContext.shared.doOnCoreQueue { _ in
@@ -572,6 +584,7 @@ class TelecomManager: ObservableObject {
 			switch cstate {
 			case .IncomingReceived:
 				let addr = call.remoteAddress
+				let callKitHandle = incomingCallHandle(address: addr)
 				incomingDisplayName(call: call) { displayNameResult in
 					let displayName = displayNameResult
 					DispatchQueue.main.async {
@@ -595,12 +608,12 @@ class TelecomManager: ObservableObject {
 						
 						if uuid != nil {
 							// Tha app is now registered, updated the call already existed.
-							self.providerDelegate.updateCall(uuid: uuid!, handle: addr!.asStringUriOnly(), hasVideo: self.remoteConfVideo, displayName: displayName)
+							self.providerDelegate.updateCall(uuid: uuid!, handle: callKitHandle, hasVideo: self.remoteConfVideo, displayName: displayName)
 						} else {
 							let videoEnabled = call.remoteParams?.videoEnabled ?? false
 							let isConference = call.callLog?.wasConference() ?? false
 							let videoDir = call.remoteParams?.videoDirection != MediaDirection.Inactive
-							self.displayIncomingCall(call: call, handle: addr!.asStringUriOnly(), hasVideo: videoEnabled && videoDir && !isConference, callId: callId, displayName: displayName)
+							self.displayIncomingCall(call: call, handle: callKitHandle, hasVideo: videoEnabled && videoDir && !isConference, callId: callId, displayName: displayName)
 						}
 					}
 				}
