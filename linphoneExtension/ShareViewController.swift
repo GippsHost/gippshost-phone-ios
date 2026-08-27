@@ -135,29 +135,28 @@ class ShareViewController: SLComposeServiceViewController {
 		self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
 	}
 	
-    func copyFileToSharedContainer(from url: URL) -> URL? {
-        guard let sharedContainerURL = FileManager.default.containerURL(
-            forSecurityApplicationGroupIdentifier: "group.org.linphone.phone.linphoneExtension"
-        ) else { return nil }
-		
-        let destinationURL = sharedContainerURL.appendingPathComponent(url.lastPathComponent)
-		
-        do {
-            if FileManager.default.fileExists(atPath: destinationURL.path) {
-                try FileManager.default.removeItem(at: destinationURL)
-            }
-            try FileManager.default.copyItem(at: url, to: destinationURL)
-			
-            let attrs = try FileManager.default.attributesOfItem(atPath: destinationURL.path)
-            if let size = attrs[.size] as? NSNumber, size.intValue > 0 {
-                return destinationURL
-            } else {
-                try? FileManager.default.removeItem(at: destinationURL)
-                return nil
-            }
-        } catch {
-            return nil
-        }
-    }
-}
+	func copyFileToSharedContainer(from url: URL) -> URL? {
+		guard let sharedContainerURL = FileManager.default.containerURL(
+			forSecurityApplicationGroupIdentifier: "group.au.com.gippshost.phone"
+		) else { return nil }
 
+		let destinationURL = sharedContainerURL.appendingPathComponent(url.lastPathComponent)
+
+		do {
+			if FileManager.default.fileExists(atPath: destinationURL.path) {
+				try FileManager.default.removeItem(at: destinationURL)
+			}
+			try FileManager.default.copyItem(at: url, to: destinationURL)
+
+			let attrs = try FileManager.default.attributesOfItem(atPath: destinationURL.path)
+			if let size = attrs[.size] as? NSNumber, size.intValue > 0 {
+				return destinationURL
+			} else {
+				try? FileManager.default.removeItem(at: destinationURL)
+				return nil
+			}
+		} catch {
+			return nil
+		}
+	}
+}

@@ -174,30 +174,6 @@ struct DebugFragment: View {
 								}
 							}
 							
-							Button {
-							} label: {
-								HStack {
-									Image("fire")
-										.renderingMode(.template)
-										.resizable()
-										.foregroundStyle(Color.orangeMain500)
-										.frame(width: 30, height: 30)
-									
-									VStack {
-										Text("help_troubleshooting_firebase_project_title")
-											.default_text_style_700(styleSize: 14)
-											.frame(maxWidth: .infinity, alignment: .leading)
-											.multilineTextAlignment(.leading)
-										
-										Text(helpViewModel.firebaseProjectId)
-											.default_text_style(styleSize: 14)
-											.frame(maxWidth: .infinity, alignment: .leading)
-											.multilineTextAlignment(.leading)
-									}
-									.padding(.horizontal, 5)
-								}
-							}
-							
 							HStack {
 								Button(
 									action: {
@@ -234,10 +210,10 @@ struct DebugFragment: View {
 		.navigationTitle("")
 		.navigationBarHidden(true)
 		.onChange(of: helpViewModel.logText) { _ in
-			showShareSheet = true
+			showShareSheet = !helpViewModel.logText.isEmpty
 		}
 		.sheet(isPresented: $showShareSheet) {
-			ShareAnySheet(items: [helpViewModel.logText])
+			ShareAnySheet(items: [URL(fileURLWithPath: helpViewModel.logText)])
 				.edgesIgnoringSafeArea(.bottom)
 		}
 		.quickLookPreview($selectedURLAttachment)

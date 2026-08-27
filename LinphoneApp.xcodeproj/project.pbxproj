@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		660AAF7F2B839272004C0FA6 /* msgNotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 660AAF7B2B839271004C0FA6 /* msgNotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		660D8A712B517D260092694D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 660D8A702B517D260092694D /* GoogleService-Info.plist */; };
 		6613A0AE2BAEB7DF008923A4 /* MeetingFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6613A0AD2BAEB7DF008923A4 /* MeetingFragment.swift */; };
 		6613A0B42BAEBE3F008923A4 /* MeetingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6613A0B32BAEBE3F008923A4 /* MeetingViewModel.swift */; };
 		66162A202BDFC2F900DCE913 /* AddParticipantsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66162A1F2BDFC2F900DCE913 /* AddParticipantsViewModel.swift */; };
@@ -17,7 +16,6 @@
 		662B69DB2B25DE25007118BF /* ProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662B69DA2B25DE25007118BF /* ProviderDelegate.swift */; };
 		6646A7A32BB2E224006B842A /* ScheduleMeetingFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6646A7A22BB2E224006B842A /* ScheduleMeetingFragment.swift */; };
 		667E5D7F2B8E430C00EBCFC4 /* linphonerc-factory in Resources */ = {isa = PBXBuildFile; fileRef = D732A90B2B0376F500DB42BA /* linphonerc-factory */; };
-		667E5D812B8E444E00EBCFC4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 667E5D802B8E444D00EBCFC4 /* GoogleService-Info.plist */; };
 		6691CA7E2B839C2D00B2A7B8 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6691CA7D2B839C2D00B2A7B8 /* NotificationService.swift */; };
 		66C468FB2D2BE54800A836F7 /* PIPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C468FA2D2BE54300A836F7 /* PIPViewModel.swift */; };
 		66C491F92B24D25B00CEA16D /* ConfigExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C491F82B24D25A00CEA16D /* ConfigExtension.swift */; };
@@ -119,7 +117,6 @@
 		D737AEEF2DA011F2005C1280 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D737AEED2DA011F2005C1280 /* Localizable.strings */; };
 		D738ACEE2E857BF10039F7D1 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D738ACED2E857BEF0039F7D1 /* KeyboardResponder.swift */; };
 		D73DD7D02EE184B200654313 /* RecordingsListBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73DD7CF2EE184A500654313 /* RecordingsListBottomSheet.swift */; };
-		D7458F392E0BDCF4000C957A /* linphoneExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D7458F2F2E0BDCF4000C957A /* linphoneExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D7479CE92FAA3C2A008EF474 /* BottomSheetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7479CE82FAA3C1F008EF474 /* BottomSheetContent.swift */; };
 		D748BF2C2ACD82D2004844EB /* ThirdPartySipAccountLoginFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D748BF2B2ACD82D2004844EB /* ThirdPartySipAccountLoginFragment.swift */; };
 		D748BF2E2ACD82E7004844EB /* ThirdPartySipAccountWarningFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D748BF2D2ACD82E7004844EB /* ThirdPartySipAccountWarningFragment.swift */; };
@@ -145,7 +142,6 @@
 		D78290B82ADD3910004AA85C /* ContactsFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78290B72ADD3910004AA85C /* ContactsFragment.swift */; };
 		D78290BB2ADD40B2004AA85C /* ContactsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78290BA2ADD40B2004AA85C /* ContactsListViewModel.swift */; };
 		D783028F2D414847009CCB60 /* DebugFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D783028E2D414845009CCB60 /* DebugFragment.swift */; };
-		D783C77C2B1089B200622CC2 /* assistant_linphone_default_values in Resources */ = {isa = PBXBuildFile; fileRef = D783C77A2B1089B200622CC2 /* assistant_linphone_default_values */; };
 		D783C77D2B1089B200622CC2 /* assistant_third_party_default_values in Resources */ = {isa = PBXBuildFile; fileRef = D783C77B2B1089B200622CC2 /* assistant_third_party_default_values */; };
 		D78607712D36CB8A009E6A7E /* SettingsAdvancedFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78607702D36CB87009E6A7E /* SettingsAdvancedFragment.swift */; };
 		D789E4DD3017697C00C50846 /* CucumberSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D789E4DC3017697C00C50846 /* CucumberSwift */; };
@@ -207,10 +203,6 @@
 		D7D24D182AC1B4E800C6F35B /* NotoSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7D24D122AC1B4E800C6F35B /* NotoSans-ExtraBold.ttf */; };
 		D7D3007A2F684EAF00836032 /* ConversationDeleteMessageBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D300792F684EAE00836032 /* ConversationDeleteMessageBottomSheet.swift */; };
 		D7D5AD7F2DD34F0E00016721 /* AppAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D7D5AD7E2DD34F0E00016721 /* AppAuth */; };
-		D7D5AD812DD34F1A00016721 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = D7D5AD802DD34F1A00016721 /* FirebaseAnalytics */; };
-		D7D5AD832DD34F2300016721 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = D7D5AD822DD34F2300016721 /* FirebaseCrashlytics */; };
-		D7D5AD852DD34F3700016721 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = D7D5AD842DD34F3700016721 /* FirebaseAnalytics */; };
-		D7D5AD872DD34F3C00016721 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = D7D5AD862DD34F3C00016721 /* FirebaseCrashlytics */; };
 		D7D67B6A2F601F6100DD9976 /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7D67B692F601F6100DD9976 /* AppIntentVocabulary.plist */; };
 		D7D67B6B2F601F6100DD9976 /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7D67B692F601F6100DD9976 /* AppIntentVocabulary.plist */; };
 		D7D67B8B2F62B0DA00DD9976 /* SettingsAdvancedCallFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D67B8A2F62B07F00DD9976 /* SettingsAdvancedCallFragment.swift */; };
@@ -260,13 +252,6 @@
 			remoteGlobalIDString = D719ABB22ABC67BF00B41C10;
 			remoteInfo = LinphoneApp;
 		};
-		D7458F372E0BDCF4000C957A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D719ABAB2ABC67BF00B41C10 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D7458F2E2E0BDCF4000C957A;
-			remoteInfo = linphoneExtension;
-		};
 		D792F15F2F02BCC2002E3225 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D719ABAB2ABC67BF00B41C10 /* Project object */;
@@ -285,7 +270,6 @@
 			files = (
 				660AAF7F2B839272004C0FA6 /* msgNotificationService.appex in Embed Foundation Extensions */,
 				D792F1612F02BCC2002E3225 /* intentsExtension.appex in Embed Foundation Extensions */,
-				D7458F392E0BDCF4000C957A /* linphoneExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,7 +279,6 @@
 /* Begin PBXFileReference section */
 		660AAF7B2B839271004C0FA6 /* msgNotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = msgNotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		660AAF842B8392E0004C0FA6 /* msgNotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = msgNotificationService.entitlements; sourceTree = "<group>"; };
-		660D8A702B517D260092694D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6613A0AD2BAEB7DF008923A4 /* MeetingFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingFragment.swift; sourceTree = "<group>"; };
 		6613A0B32BAEBE3F008923A4 /* MeetingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingViewModel.swift; sourceTree = "<group>"; };
 		66162A1F2BDFC2F900DCE913 /* AddParticipantsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddParticipantsViewModel.swift; sourceTree = "<group>"; };
@@ -303,7 +286,6 @@
 		662B69D82B25DE18007118BF /* TelecomManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelecomManager.swift; sourceTree = "<group>"; };
 		662B69DA2B25DE25007118BF /* ProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderDelegate.swift; sourceTree = "<group>"; };
 		6646A7A22BB2E224006B842A /* ScheduleMeetingFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleMeetingFragment.swift; sourceTree = "<group>"; };
-		667E5D802B8E444D00EBCFC4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6691CA7D2B839C2D00B2A7B8 /* NotificationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		66C468FA2D2BE54300A836F7 /* PIPViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PIPViewModel.swift; sourceTree = "<group>"; };
 		66C491F82B24D25A00CEA16D /* ConfigExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigExtension.swift; sourceTree = "<group>"; };
@@ -441,7 +423,6 @@
 		D78290B72ADD3910004AA85C /* ContactsFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsFragment.swift; sourceTree = "<group>"; };
 		D78290BA2ADD40B2004AA85C /* ContactsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsListViewModel.swift; sourceTree = "<group>"; };
 		D783028E2D414845009CCB60 /* DebugFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugFragment.swift; sourceTree = "<group>"; };
-		D783C77A2B1089B200622CC2 /* assistant_linphone_default_values */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = assistant_linphone_default_values; sourceTree = "<group>"; };
 		D783C77B2B1089B200622CC2 /* assistant_third_party_default_values */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = assistant_third_party_default_values; sourceTree = "<group>"; };
 		D78607702D36CB87009E6A7E /* SettingsAdvancedFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAdvancedFragment.swift; sourceTree = "<group>"; };
 		D78E06272BE3811D00CE3783 /* CallStatsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallStatsModel.swift; sourceTree = "<group>"; };
@@ -582,8 +563,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7D5AD872DD34F3C00016721 /* FirebaseCrashlytics in Frameworks */,
-				D7D5AD852DD34F3700016721 /* FirebaseAnalytics in Frameworks */,
 				C618BF582D75CA0D005A00E0 /* linphonesw in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -610,8 +589,6 @@
 				D7D5AD7F2DD34F0E00016721 /* AppAuth in Frameworks */,
 				D7DF8BE72E2104DC003A3BC7 /* ElegantEmojiPicker in Frameworks */,
 				C618BF562D75CA03005A00E0 /* linphonesw in Frameworks */,
-				D7D5AD832DD34F2300016721 /* FirebaseCrashlytics in Frameworks */,
-				D7D5AD812DD34F1A00016721 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,7 +613,6 @@
 		660AAF7C2B839272004C0FA6 /* msgNotificationService */ = {
 			isa = PBXGroup;
 			children = (
-				667E5D802B8E444D00EBCFC4 /* GoogleService-Info.plist */,
 				6691CA7D2B839C2D00B2A7B8 /* NotificationService.swift */,
 				660AAF842B8392E0004C0FA6 /* msgNotificationService.entitlements */,
 			);
@@ -780,7 +756,6 @@
 			children = (
 				D72404C23018AAA50076743E /* Features */,
 				D7D67B692F601F6100DD9976 /* AppIntentVocabulary.plist */,
-				660D8A702B517D260092694D /* GoogleService-Info.plist */,
 				D719ABB52ABC67BF00B41C10 /* Linphone */,
 				660AAF7C2B839272004C0FA6 /* msgNotificationService */,
 				D7458F302E0BDCF4000C957A /* linphoneExtension */,
@@ -1135,7 +1110,6 @@
 			isa = PBXGroup;
 			children = (
 				D7BC10D52F4EF21D00F09BDA /* Sounds */,
-				D783C77A2B1089B200622CC2 /* assistant_linphone_default_values */,
 				D783C77B2B1089B200622CC2 /* assistant_third_party_default_values */,
 				D732A90A2B0376F500DB42BA /* linphonerc-default */,
 				D732A90B2B0376F500DB42BA /* linphonerc-factory */,
@@ -1376,14 +1350,12 @@
 				D719ABB02ABC67BF00B41C10 /* Frameworks */,
 				660AAF802B839272004C0FA6 /* Embed Foundation Extensions */,
 				D719ABB12ABC67BF00B41C10 /* Resources */,
-				D72F04F52DDB2CB800F4C713 /* ShellScript */,
 				D7D1F5432EDDB9C20034EEB0 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				660AAF7E2B839272004C0FA6 /* PBXTargetDependency */,
-				D7458F382E0BDCF4000C957A /* PBXTargetDependency */,
 				D792F1602F02BCC2002E3225 /* PBXTargetDependency */,
 			);
 			name = LinphoneApp;
@@ -1495,7 +1467,6 @@
 			mainGroup = D719ABAA2ABC67BF00B41C10;
 			packageReferences = (
 				D7D5AD7B2DD34E4D00016721 /* XCRemoteSwiftPackageReference "AppAuth-iOS" */,
-				D7D5AD7C2DD34E7C00016721 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				D7DF8BE42E2104D0003A3BC7 /* XCRemoteSwiftPackageReference "Elegant-Emoji-Picker" */,
 				D7127F822FE995D400631F65 /* XCRemoteSwiftPackageReference "linphone-sdk-swift-ios" */,
 				D789E4DB3017697C00C50846 /* XCRemoteSwiftPackageReference "CucumberSwift" */,
@@ -1521,7 +1492,6 @@
 			files = (
 				667E5D7F2B8E430C00EBCFC4 /* linphonerc-factory in Resources */,
 				D7E394C52DAC6561005FA0DD /* Localizable.strings in Resources */,
-				667E5D812B8E444E00EBCFC4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1560,8 +1530,6 @@
 				D732A90C2B0376F500DB42BA /* linphonerc-default in Resources */,
 				D7D67B6A2F601F6100DD9976 /* AppIntentVocabulary.plist in Resources */,
 				D732A90D2B0376F500DB42BA /* linphonerc-factory in Resources */,
-				D783C77C2B1089B200622CC2 /* assistant_linphone_default_values in Resources */,
-				660D8A712B517D260092694D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1583,23 +1551,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D72F04F52DDB2CB800F4C713 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
-		};
 		D7D1F5432EDDB9C20034EEB0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1873,11 +1824,6 @@
 			target = D719ABB22ABC67BF00B41C10 /* LinphoneApp */;
 			targetProxy = C6E408B32F8E1A33003E0F8C /* PBXContainerItemProxy */;
 		};
-		D7458F382E0BDCF4000C957A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D7458F2E2E0BDCF4000C957A /* linphoneExtension */;
-			targetProxy = D7458F372E0BDCF4000C957A /* PBXContainerItemProxy */;
-		};
 		D792F1602F02BCC2002E3225 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D792F1572F02BCC2002E3225 /* intentsExtension */;
@@ -1946,14 +1892,13 @@
 				CODE_SIGN_ENTITLEMENTS = msgNotificationService/msgNotificationService.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"DEBUG=1",
-					"USE_CRASHLYTICS=1",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = msgNotificationService/Info.plist;
@@ -1969,7 +1914,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				OTHER_SWIFT_FLAGS = "$(inherited) -DUSE_CRASHLYTICS";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone.notification;
 				PRODUCT_NAME = GHPhoneNotification;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1991,13 +1936,12 @@
 				CODE_SIGN_ENTITLEMENTS = msgNotificationService/msgNotificationService.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"USE_CRASHLYTICS=1",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = msgNotificationService/Info.plist;
@@ -2013,7 +1957,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				OTHER_SWIFT_FLAGS = "$(inherited) -DUSE_CRASHLYTICS";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone.notification;
 				PRODUCT_NAME = GHPhoneNotification;
 				PROVISIONING_PROFILE_SPECIFIER = "GippsHost Phone Notification App Store";
@@ -2032,7 +1976,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -2061,7 +2005,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -2091,7 +2035,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -2109,7 +2053,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LinphoneApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LinphoneApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GippsHostPhone.app/GippsHostPhone";
 			};
 			name = Debug;
 		};
@@ -2120,7 +2064,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -2137,7 +2081,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LinphoneApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LinphoneApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GippsHostPhone.app/GippsHostPhone";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -2270,7 +2214,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = Linphone/Linphone.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"Linphone/Preview Content\"";
@@ -2280,20 +2224,18 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"DEBUG=1",
-					"USE_CRASHLYTICS=1",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Linphone/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "GH Phone";
 				INFOPLIST_KEY_CFBundleName = GippsHostPhone;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "Deprecated - Prior to iOS 17 full calendar access is required";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "GippsHost Phone can add call reminders to your calendar when you request it.";
 				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "GippsHost Phone can add call reminders to your calendar when you request it.";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Camera usage is required for video VOIP calls";
-				INFOPLIST_KEY_NSContactsUsageDescription = "Make calls with your friends";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "App requires access to the local network to establish VoIP connections";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone usage is required for VOIP calls";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Share photos with your friends and customize avatars";
+				INFOPLIST_KEY_NSCameraUsageDescription = "GippsHost Phone uses the camera only when you choose to scan an account setup QR code.";
+				INFOPLIST_KEY_NSContactsUsageDescription = "GippsHost Phone uses your contacts to show caller names and let you place calls from your address book.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "GippsHost Phone uses the microphone so people can hear you during calls.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "GippsHost Phone uses Photos only when you choose a saved account setup QR image.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -2314,7 +2256,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
-				OTHER_SWIFT_FLAGS = "$(inherited) -DUSE_CRASHLYTICS";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone;
 				PRODUCT_NAME = GippsHostPhone;
 				SDKROOT = iphoneos;
@@ -2335,7 +2277,7 @@
 				CODE_SIGN_ENTITLEMENTS = Linphone/Linphone.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Linphone/Preview Content\"";
 				DEVELOPMENT_TEAM = UNX3DH28B3;
@@ -2343,20 +2285,18 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"USE_CRASHLYTICS=1",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Linphone/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "GH Phone";
 				INFOPLIST_KEY_CFBundleName = GippsHostPhone;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "Deprecated - Prior to iOS 17 full calendar access is required";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "GippsHost Phone can add call reminders to your calendar when you request it.";
 				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "GippsHost Phone can add call reminders to your calendar when you request it.";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Camera usage is required for video VOIP calls";
-				INFOPLIST_KEY_NSContactsUsageDescription = "Make calls with your friends";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "App requires access to the local network to establish VoIP connections";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Microphone usage is required for VOIP calls";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Share photos with your friends and customize avatars";
+				INFOPLIST_KEY_NSCameraUsageDescription = "GippsHost Phone uses the camera only when you choose to scan an account setup QR code.";
+				INFOPLIST_KEY_NSContactsUsageDescription = "GippsHost Phone uses your contacts to show caller names and let you place calls from your address book.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "GippsHost Phone uses the microphone so people can hear you during calls.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "GippsHost Phone uses Photos only when you choose a saved account setup QR image.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -2377,7 +2317,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MARKETING_VERSION = 1.0;
-				OTHER_SWIFT_FLAGS = "$(inherited) -DUSE_CRASHLYTICS";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = au.com.gippshost.phone;
 				PRODUCT_NAME = GippsHostPhone;
 				PROVISIONING_PROFILE_SPECIFIER = "GippsHost Phone App Store";
@@ -2396,7 +2336,7 @@
 				CODE_SIGN_ENTITLEMENTS = linphoneExtension/linphoneExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -2432,7 +2372,7 @@
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -2467,7 +2407,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -2505,7 +2445,7 @@
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = UNX3DH28B3;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -2638,14 +2578,6 @@
 				minimumVersion = 2.0.0;
 			};
 		};
-		D7D5AD7C2DD34E7C00016721 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.12.0;
-			};
-		};
 		D7DF8BE42E2104D0003A3BC7 /* XCRemoteSwiftPackageReference "Elegant-Emoji-Picker" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Finalet/Elegant-Emoji-Picker";
@@ -2676,26 +2608,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D7D5AD7B2DD34E4D00016721 /* XCRemoteSwiftPackageReference "AppAuth-iOS" */;
 			productName = AppAuth;
-		};
-		D7D5AD802DD34F1A00016721 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D7D5AD7C2DD34E7C00016721 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		D7D5AD822DD34F2300016721 /* FirebaseCrashlytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D7D5AD7C2DD34E7C00016721 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCrashlytics;
-		};
-		D7D5AD842DD34F3700016721 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D7D5AD7C2DD34E7C00016721 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		D7D5AD862DD34F3C00016721 /* FirebaseCrashlytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D7D5AD7C2DD34E7C00016721 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCrashlytics;
 		};
 		D7DF8BE62E2104DC003A3BC7 /* ElegantEmojiPicker */ = {
 			isa = XCSwiftPackageProductDependency;

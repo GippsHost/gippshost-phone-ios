@@ -1,6 +1,5 @@
 import AVFoundation
 import Contacts
-import Photos
 import SwiftUI
 import UserNotifications
 
@@ -221,13 +220,10 @@ struct SettingsFragment: View {
 			if notificationSettings.authorizationStatus != .authorized && notificationSettings.authorizationStatus != .provisional { missing.append("Notifications") }
 			if AVAudioSession.sharedInstance().recordPermission != .granted { missing.append("Microphone") }
 			if CNContactStore.authorizationStatus(for: .contacts) != .authorized { missing.append("Contacts") }
-			if AVCaptureDevice.authorizationStatus(for: .video) != .authorized { missing.append("Camera") }
-			let photoStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-			if photoStatus != .authorized && photoStatus != .limited { missing.append("Photos") }
 			DispatchQueue.main.async {
 				permissionsNeedAttention = !missing.isEmpty
 				permissionSummary = missing.isEmpty
-					? "All permissions required for calling and contacts are enabled."
+					? "All permissions required for calling and contacts are enabled. Camera access is requested only when you scan a setup code."
 					: "Review access for: \(missing.joined(separator: ", "))."
 			}
 		}

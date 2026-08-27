@@ -123,7 +123,7 @@ struct ThirdPartySipAccountLoginFragment: View {
 						.padding(.all, 10)
 						.onTapGesture {
 							withAnimation {
-								accountLoginViewModel.domain = "sip.linphone.org"
+								accountLoginViewModel.domain = "voice.gippshost.com.au"
 								accountLoginViewModel.transportType = "TLS"
 								dismiss()
 							}
@@ -203,7 +203,7 @@ struct ThirdPartySipAccountLoginFragment: View {
 					.default_text_style_700(styleSize: 15)
 					.padding(.bottom, -5)
 				
-				TextField("sip.linphone.org", text: $accountLoginViewModel.domain)
+				TextField("voice.gippshost.com.au", text: $accountLoginViewModel.domain)
 					.default_text_style(styleSize: 15)
 					.disableAutocorrection(true)
 					.autocapitalization(.none)

@@ -18,39 +18,33 @@
  */
 
 import Foundation
-import Photos
 import Contacts
 import UserNotifications
 import SwiftUI
-import Network
+import AVFoundation
 
 class PermissionManager: ObservableObject {
 	
 	static let shared = PermissionManager()
 	
 	@Published var pushPermissionGranted = false
-	@Published var photoLibraryPermissionGranted = false
-	@Published var cameraPermissionGranted = false
 	@Published var contactsPermissionGranted = false
 	@Published var microphonePermissionGranted = false
 	@Published var allPermissionsHaveBeenDisplayed = false
 	
 	private init() {}
 
-	/// Checks every permission used by the calling experience when the app starts.
-	/// New permissions are requested with the system sheet. Permissions that were
-	/// previously denied are returned so the app can offer a shortcut to Settings.
+	/// Checks the permissions needed for the core calling experience when the app starts.
+	/// Camera and Photos are optional and are requested by the features that use them.
+	/// New core permissions are requested with the system sheet. Core permissions that
+	/// were previously denied are returned so the app can offer a shortcut to Settings.
 	func checkPermissionsOnAppLoad(completion: @escaping ([String]) -> Void) {
 		UNUserNotificationCenter.current().getNotificationSettings { settings in
-			let cameraStatus = AVCaptureDevice.authorizationStatus(for: .video)
 			let microphoneStatus = AVAudioSession.sharedInstance().recordPermission
-			let photoStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
 			let contactsStatus = CNContactStore.authorizationStatus(for: .contacts)
 
 			let hasUndeterminedPermission = settings.authorizationStatus == .notDetermined
-				|| cameraStatus == .notDetermined
 				|| microphoneStatus == .undetermined
-				|| photoStatus == .notDetermined
 				|| contactsStatus == .notDetermined
 
 			if hasUndeterminedPermission {
@@ -71,12 +65,6 @@ class PermissionManager: ObservableObject {
 			if contactsStatus == .denied {
 				missingPermissions.append("Contacts")
 			}
-			if cameraStatus == .denied {
-				missingPermissions.append("Camera")
-			}
-			if photoStatus == .denied {
-				missingPermissions.append("Photos")
-			}
 
 			DispatchQueue.main.async {
 				completion(missingPermissions)
@@ -90,13 +78,10 @@ class PermissionManager: ObservableObject {
 			
 			dispatchGroup.enter()
 			self.microphoneRequestPermission()
-			self.photoLibraryRequestPermission()
-			self.cameraRequestPermission()
 			self.contactsRequestPermission(group: dispatchGroup)
 			
 			dispatchGroup.notify(queue: .main) {
-				// Now request local network authorization last
-				self.requestLocalNetworkAuthorization()
+				self.allPermissionsHaveBeenDisplayed = true
 			}
 		}
 	}
@@ -122,22 +107,6 @@ class PermissionManager: ObservableObject {
 		})
 	}
 	
-	func photoLibraryRequestPermission() {
-		PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: {status in
-			DispatchQueue.main.async {
-				self.photoLibraryPermissionGranted = (status == .authorized || status == .limited || status == .restricted)
-			}
-		})
-	}
-	
-	func cameraRequestPermission() {
-		AVCaptureDevice.requestAccess(for: .video, completionHandler: {accessGranted in
-			DispatchQueue.main.async {
-				self.cameraPermissionGranted = accessGranted
-			}
-		})
-	}
-	
 	func contactsRequestPermission(group: DispatchGroup) {
 		let store = CNContactStore()
 		store.requestAccess(for: .contacts) { success, _ in
@@ -148,36 +117,8 @@ class PermissionManager: ObservableObject {
 		}
 	}
 	
-	func requestLocalNetworkAuthorization() {
-		// Use a general UDP broadcast endpoint to attempt triggering the authorization request
-		let host = NWEndpoint.Host("255.255.255.255") // Broadcast on the local network
-		let port = NWEndpoint.Port(12345) // Choose an arbitrary port
-		
-		let params = NWParameters.udp
-		let connection = NWConnection(host: host, port: port, using: params)
-		
-		connection.stateUpdateHandler = { newState in
-			switch newState {
-			case .ready:
-				print("Connection ready")
-				connection.cancel() // Close the connection after establishing it
-			case .failed(let error):
-				print("Connection failed: \(error)")
-				connection.cancel()
-			default:
-				break
-			}
-		}
-		connection.start(queue: .main)
-		DispatchQueue.main.async {
-			self.allPermissionsHaveBeenDisplayed = true
-		}
-	}
-	
 	func havePermissionsAlreadyBeenRequested() {
-		let cameraStatus = AVCaptureDevice.authorizationStatus(for: .video)
 		let micStatus = AVAudioSession.sharedInstance().recordPermission
-		let photoStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
 		let contactsStatus = CNContactStore.authorizationStatus(for: .contacts)
 		
 		let notifGroup = DispatchGroup()
@@ -190,9 +131,7 @@ class PermissionManager: ObservableObject {
 		}
 		
 		notifGroup.notify(queue: .main) {
-			let allAlreadyRequested = cameraStatus != .notDetermined &&
-									  micStatus != .undetermined &&
-									  photoStatus != .notDetermined &&
+			let allAlreadyRequested = micStatus != .undetermined &&
 									  contactsStatus != .notDetermined &&
 									  notifStatus != .notDetermined
 			

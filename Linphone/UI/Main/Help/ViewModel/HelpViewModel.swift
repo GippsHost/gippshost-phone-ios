@@ -28,7 +28,6 @@ class HelpViewModel: ObservableObject {
 	@Published var version: String = ""
 	@Published var appVersion: String = ""
 	@Published var sdkVersion: String = ""
-	@Published var firebaseProjectId: String = ""
 	@Published var checkUpdateAvailable: Bool = false
 	@Published var uploadLogsAvailable: Bool = false
 	@Published var logsUploadInProgress: Bool = false
@@ -52,12 +51,6 @@ class HelpViewModel: ObservableObject {
 		self.version = appGitTag + "-" + appGitVersion + "\n(\(appGitBranch))"
 		
 		self.sdkVersion = sdkGitVersion + "\n(\(sdkGitBranch))"
-		
-		if let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
-		   let plist = NSDictionary(contentsOfFile: path) as? [String: Any],
-		   let projectID = plist["PROJECT_ID"] as? String {
-			firebaseProjectId = projectID
-		}
 		
 		CoreContext.shared.doOnCoreQueue { core in
 			self.coreDelegate = CoreDelegateStub(
@@ -126,11 +119,13 @@ class HelpViewModel: ObservableObject {
 	*/
 	
 	func shareLogs() {
-		CoreContext.shared.doOnCoreQueue { core in
-			Log.info("\(self.TAG) Uploading debug logs for sharing")
-			core.uploadLogCollection()
+		Log.info("\(self.TAG) Compressing debug logs for local sharing")
+		logsUploadInProgress = true
+		DispatchQueue.global(qos: .userInitiated).async {
+			let archivePath = Core.compressLogCollection()
 			DispatchQueue.main.async {
-				self.logsUploadInProgress = true
+				self.logsUploadInProgress = false
+				self.logText = archivePath
 			}
 		}
 	}

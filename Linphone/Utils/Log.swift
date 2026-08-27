@@ -24,9 +24,6 @@ import UIKit
 import os
 import linphonesw
 import linphone
-#if USE_CRASHLYTICS
-import Firebase
-#endif
 
 class Log: LoggingServiceDelegate {
 	static var collectionPath: String {
@@ -104,11 +101,6 @@ class Log: LoggingServiceDelegate {
 		} else {
 			NSLog(log)
 		}
-#if USE_CRASHLYTICS
-		if FirebaseApp.app() != nil {
-			Crashlytics.crashlytics().log(log)
-		}
-#endif
 	}
 		
 	func onLogMessageWritten(logService: LoggingService, domain: String, level: LogLevel, message: String) {

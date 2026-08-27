@@ -51,10 +51,6 @@ struct ContactsView: View {
 					.padding()
 				}
 				
-				// For testing crashlytics
-				/*Button(action: CoreContext.shared.crashForCrashlytics, label: {
-					Text("CRASH ME")
-				})*/
 			}
 		}
 		.navigationViewStyle(.stack)

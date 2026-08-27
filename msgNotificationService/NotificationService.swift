@@ -21,9 +21,6 @@
 
 import UserNotifications
 import linphonesw
-#if USE_CRASHLYTICS
-import Firebase
-#endif
 
 var LINPHONE_DUMMY_SUBJECT = "dummy subject"
 
@@ -83,9 +80,6 @@ class NotificationService: UNNotificationServiceExtension {
     
     override init() {
         super.init()
-#if USE_CRASHLYTICS
-        FirebaseApp.configure()
-#endif
     }
     
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
@@ -323,6 +317,7 @@ class NotificationService: UNNotificationServiceExtension {
 
 		let factoryPath = FileUtil.bundleFilePath("linphonerc-factory")!
 		if let config = Config.newForSharedCore(appGroupId: appGroupName, configFilename: "linphonerc", factoryConfigFilename: factoryPath) {
+			FileUtil.enforceGippsHostManagedConfiguration(config)
 			lc = try? Factory.Instance.createSharedCoreWithConfig(config: config, systemContext: nil, appGroupId: appGroupName, mainCore: false)
 			return lc != nil
 		} else {

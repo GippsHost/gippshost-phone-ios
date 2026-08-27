@@ -90,7 +90,7 @@ class MDMManager {
 			try config.loadFromXmlString(buffer: xmlConfig)
 			Log.info("[MDMManager] xmlConfig applied (\(xmlConfig.count) chars)")
 		} catch let error {
-			Log.error("[MDMManager] Failed loading xmlConfig: error = \(error) xml = \(xmlConfig)")
+			Log.error("[MDMManager] Failed loading xmlConfig: error = \(error), \(xmlConfig.count) chars, SHA256: \(hash)")
 		}
 	}
 
@@ -103,6 +103,7 @@ class MDMManager {
 		}
 
 		loadXMLConfigFromMdm(config: core.config!)
+		FileUtil.enforceGippsHostManagedConfiguration(core.config!)
 
 		guard let mdmConfig = UserDefaults.standard.dictionary(forKey: "com.apple.configuration.managed") else {
 			if hasMDMConfig {
@@ -141,10 +142,10 @@ class MDMManager {
 			do {
 				if configUri != currentProvisioningUri {
 					try core.setProvisioninguri(newValue: configUri)
-					Log.info("[MDMManager] configUri applied \(configUri)")
+					Log.info("[MDMManager] configUri applied (\(configUri.count) chars)")
 				}
 			} catch let error {
-				Log.error("[MDMManager] Failed setting provisioning URI: error = \(error) configUri = \(configUri)")
+				Log.error("[MDMManager] Failed setting provisioning URI: error = \(error), \(configUri.count) chars")
 			}
 		}
 		

@@ -19,7 +19,7 @@
 
 import XCTest
 import linphonesw
-@testable import LinphoneApp
+@testable import GippsHostPhone
 
 class MDMManagerTests: XCTestCase {
 

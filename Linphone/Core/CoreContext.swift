@@ -27,10 +27,6 @@ import UniformTypeIdentifiers
 import Network
 import SwiftUI
 
-#if USE_CRASHLYTICS
-import Firebase
-#endif
-
 class CoreContext: ObservableObject {
     
     static let shared = CoreContext()
@@ -104,6 +100,19 @@ class CoreContext: ObservableObject {
 
 	/// Shared handler for configuration changes (both from core provisioning and MDM).
 	private func handleConfigurationChanged(status: ConfiguringState) {
+		if status == .Successful {
+			// Provisioning XML is applied asynchronously and may overwrite values after
+			// startup. Reassert the GippsHost-only service and calling policy before the
+			// refreshed configuration is exposed to the UI or used by an account.
+			if let config = self.mCore.config {
+				FileUtil.enforceGippsHostManagedConfiguration(config)
+			}
+			self.applyGippsHostManagedCallingDefaults(core: self.mCore)
+			for account in self.mCore.accountList {
+				self.applyGippsHostPushGateway(core: self.mCore, account: account)
+			}
+		}
+
 		let themeMainColor = AppServices.corePreferences.themeMainColor
 		SharedMainViewModel.shared.updateConfigChanges()
 		if status == .Successful {
@@ -186,8 +195,19 @@ class CoreContext: ObservableObject {
 			params.pushNotificationConfig?.teamId != "UNX3DH28B3" ||
 			params.pushNotificationConfig?.bundleIdentifier != "au.com.gippshost.phone" ||
 			params.pushNotificationConfig?.param != expectedPushParam
-		let needsIceUpdate = params.natPolicy?.iceEnabled != true
-		guard needsServerUpdate || needsRouteUpdate || needsPushUpdate || needsIceUpdate else { return }
+		let currentNatPolicy = params.natPolicy
+		let needsNatUpdate = currentNatPolicy?.stunServer != expectedProxy ||
+			currentNatPolicy?.stunEnabled != true ||
+			currentNatPolicy?.iceEnabled != true ||
+			currentNatPolicy?.turnEnabled != false ||
+			currentNatPolicy?.upnpEnabled != false
+		let needsServiceSanitization = params.qualityReportingEnabled ||
+			!(params.qualityReportingCollector ?? "").isEmpty ||
+			params.qualityReportingInterval != 0 ||
+			params.limeServerUrl != nil ||
+			params.conferenceFactoryAddress != nil ||
+			params.audioVideoConferenceFactoryAddress != nil
+		guard needsServerUpdate || needsRouteUpdate || needsPushUpdate || needsNatUpdate || needsServiceSanitization else { return }
 
 		guard let newParams = params.clone() else { return }
 		if needsServerUpdate,
@@ -202,13 +222,21 @@ class CoreContext: ObservableObject {
 		newParams.pushNotificationConfig?.teamId = "UNX3DH28B3"
 		newParams.pushNotificationConfig?.bundleIdentifier = "au.com.gippshost.phone"
 		newParams.pushNotificationConfig?.param = expectedPushParam
-		if needsIceUpdate {
-			let natPolicy = params.natPolicy ?? (try? core.createNatPolicy())
-			natPolicy?.iceEnabled = true
-			newParams.natPolicy = natPolicy
-		}
+		let natPolicy = currentNatPolicy?.clone() ?? (try? core.createNatPolicy())
+		natPolicy?.stunServer = expectedProxy
+		natPolicy?.stunEnabled = true
+		natPolicy?.iceEnabled = true
+		natPolicy?.turnEnabled = false
+		natPolicy?.upnpEnabled = false
+		newParams.natPolicy = natPolicy
+		newParams.qualityReportingEnabled = false
+		newParams.qualityReportingCollector = nil
+		newParams.qualityReportingInterval = 0
+		newParams.limeServerUrl = nil
+		newParams.conferenceFactoryAddress = nil
+		newParams.audioVideoConferenceFactoryAddress = nil
 		account.params = newParams
-		Log.info("[CoreContext] Applied GippsHost PushKit gateway and ICE media policy to \(account.displayName())")
+		Log.info("[CoreContext] Applied GippsHost PushKit gateway, owned STUN/ICE policy and service restrictions to \(account.displayName())")
 	}
 	
 	func doOnCoreQueueCoreStarted(synchronous: Bool = false, lambda: @escaping (Core) -> Void) {
@@ -241,9 +269,6 @@ class CoreContext: ObservableObject {
 	
 	func initialiseCore() throws {
 		Log.info("Initialising core")
-#if USE_CRASHLYTICS
-		FirebaseApp.configure()
-#endif
 		monitor.pathUpdateHandler = { path in
 			let isConnected = path.status == .satisfied
 			if self.networkStatusIsConnected != isConnected {
@@ -268,6 +293,7 @@ class CoreContext: ObservableObject {
 			Factory.Instance.enableLogCollection(state: LogCollectionState.Enabled)
 
 			MDMManager.shared.loadXMLConfigFromMdm(config: AppServices.config)
+			FileUtil.enforceGippsHostManagedConfiguration(AppServices.config)
 			// Liblinphone uses this value when it regenerates pn-param after the
 			// PushKit token arrives. Set it for existing installations as well as
 			// fresh installs before the shared core is created.
@@ -637,10 +663,6 @@ class CoreContext: ObservableObject {
 		}
 	}
 	
-	func crashForCrashlytics() {
-		fatalError("Crashing app to test crashlytics")
-	}
-	
 	func doOnCoreQueue(synchronous: Bool = false, action: @escaping (_ core: Core) -> Void ) {
 		if coreIsStarted {
 			doOnCoreQueueCoreStarted(synchronous: synchronous) { core in
@@ -724,17 +746,6 @@ class CoreContext: ObservableObject {
 		}
 	}
 	
-	func runMigration600() {
-		self.mCore.config!.setBool(section: "sip", key: "auto_answer_replacing_calls", value: false)
-		self.mCore.config!.setBool(section: "sip", key: "deliver_imdn", value: false)
-		self.mCore.config!.setString(section: "misc", key: "log_collection_upload_server_url", value: "https://files.linphone.org:443/http-file-transfer-server/hft.php")
-		self.mCore.config!.setString(section: "misc", key: "file_transfer_server_url", value: "https://files.linphone.org:443/http-file-transfer-server/hft.php")
-		self.mCore.config!.setString(section: "misc", key: "version_check_url_root", value: "https://download.linphone.org/releases")
-		
-		self.mCore.imdnToEverybodyThreshold = 1
-		self.imdnToEverybodyThreshold = self.mCore.imdnToEverybodyThreshold == 1
-	}
-	
 	func runMigration620() {
 		doOnCoreQueueCoreStarted { core in
 			self.mCore.chatMessageFilesDeletionEnabled = true
@@ -765,6 +776,9 @@ enum AppServices {
 			configFilename: "linphonerc",
 			factoryConfigFilename: FileUtil.bundleFilePath("linphonerc-factory")
 		)
+		if let config = _config {
+			FileUtil.enforceGippsHostManagedConfiguration(config)
+		}
 
 		return _config
 	}

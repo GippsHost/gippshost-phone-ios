@@ -64,14 +64,8 @@ class AccountLoginViewModel: ObservableObject {
 					return
 				}
 
-				if self.domain != "sip.linphone.org" {
-					if let assistantLinphone = Bundle.main.path(forResource: "assistant_third_party_default_values", ofType: nil) {
-						core.loadConfigFromXml(xmlUri: assistantLinphone)
-					}
-				} else {
-					if let assistantLinphone = Bundle.main.path(forResource: "assistant_linphone_default_values", ofType: nil) {
-						core.loadConfigFromXml(xmlUri: assistantLinphone)
-					}
+				if let gippsHostDefaults = Bundle.main.path(forResource: "assistant_third_party_default_values", ofType: nil) {
+					core.loadConfigFromXml(xmlUri: gippsHostDefaults)
 				}
 				
 				// Get the transport protocol to use.

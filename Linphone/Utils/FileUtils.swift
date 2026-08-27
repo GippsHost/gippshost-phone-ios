@@ -22,6 +22,17 @@ import linphonesw
 import UniformTypeIdentifiers
 
 class FileUtil: NSObject {
+	/// Removes public Linphone service endpoints from the shared configuration.
+	/// This runs for both fresh installs and upgrades because the App Group config
+	/// survives app updates and is shared with the notification extension.
+	public class func enforceGippsHostManagedConfiguration(_ config: Config) {
+		config.setString(section: "misc", key: "log_collection_upload_server_url", value: "")
+		config.setString(section: "misc", key: "file_transfer_server_url", value: "")
+		config.setString(section: "misc", key: "version_check_url_root", value: "")
+		config.setString(section: "sip", key: "rls_uri", value: "")
+		config.setString(section: "account_creator", key: "url", value: "")
+		config.setString(section: "ui", key: "contacts_filter", value: "")
+	}
 	
 	static let appGroupName: String = {
 		Bundle.main.object(forInfoDictionaryKey: "APP_GROUP_NAME") as? String
