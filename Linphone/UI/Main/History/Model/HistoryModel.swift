@@ -143,6 +143,12 @@ class HistoryModel: ObservableObject, Identifiable {
 				self.addressName = addressFriendNameTmp
 				self.avatarModel = avatarModelTmp
 			}
+		} else if let nativeName = ContactsManager.shared.nativeContactName(for: address.username) {
+			DispatchQueue.main.async {
+				self.isFriend = true
+				self.addressName = nativeName
+				self.avatarModel = ContactAvatarModel(friend: nil, name: nativeName, address: self.address, withPresence: false)
+			}
 		} else {
 			DispatchQueue.main.async {
 				self.avatarModel = ContactAvatarModel(friend: nil, name: self.addressName, address: self.address, withPresence: false)

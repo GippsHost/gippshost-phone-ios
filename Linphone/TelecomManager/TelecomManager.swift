@@ -353,6 +353,11 @@ class TelecomManager: ObservableObject {
 	}
 	
 	func displayIncomingCall(call: Call?, handle: String, hasVideo: Bool, callId: String, displayName: String) {
+		if let existingUUID = providerDelegate.uuids[callId] {
+			Log.info("CallKit: incoming call-id [\(callId)] already has UUID [\(existingUUID.description)]; updating it instead of reporting another call")
+			providerDelegate.updateCall(uuid: existingUUID, handle: handle, hasVideo: hasVideo, displayName: displayName)
+			return
+		}
 		let uuid = UUID()
 		let callInfo = CallInfo.newIncomingCallInfo(callId: callId)
 		
@@ -380,6 +385,8 @@ class TelecomManager: ObservableObject {
 					if call.callLog?.wasConference() != true {
 						if let addressFriend = friendResult {
 							completion(addressFriend.name!)
+						} else if let contactName = ContactsManager.shared.nativeContactName(for: call.remoteAddress?.username) {
+							completion(contactName)
 						} else if let remoteAddress = call.remoteAddress {
 							if remoteAddress.displayName != nil {
 								completion(remoteAddress.displayName!)

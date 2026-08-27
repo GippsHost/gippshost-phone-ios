@@ -498,7 +498,7 @@ final class ContactsManager: ObservableObject {
 
 	/// Produces one stable Australian national form for contact matching without
 	/// relying on the account's optional international-prefix preference.
-	private func canonicalPhoneNumber(_ value: String) -> String? {
+	func canonicalPhoneNumber(_ value: String) -> String? {
 		var digits = value.filter(\.isNumber)
 		if digits.hasPrefix("001161") {
 			digits = String(digits.dropFirst(4))
@@ -509,6 +509,45 @@ final class ContactsManager: ObservableObject {
 			digits = "0" + digits
 		}
 		return digits.count >= 8 ? digits : nil
+	}
+
+	/// Looks directly in the iOS address book. Incoming VoIP pushes can arrive
+	/// before Linphone has rebuilt its native friend cache, so that cache cannot
+	/// be the sole source for CallKit caller names.
+	func nativeContactName(for phoneNumber: String?) -> String? {
+		guard let phoneNumber,
+			  let canonicalTarget = canonicalPhoneNumber(phoneNumber) else { return nil }
+
+		let status = CNContactStore.authorizationStatus(for: .contacts)
+		var canReadContacts = status == .authorized
+		if #available(iOS 18.0, *), status == .limited {
+			canReadContacts = true
+		}
+		guard canReadContacts else { return nil }
+
+		let keys: [CNKeyDescriptor] = [
+			CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+			CNContactPhoneNumbersKey as CNKeyDescriptor
+		]
+		let request = CNContactFetchRequest(keysToFetch: keys)
+		var matchedName: String?
+		do {
+			try CNContactStore().enumerateContacts(with: request) { contact, stop in
+				let matches = contact.phoneNumbers.contains {
+					self.canonicalPhoneNumber($0.value.stringValue) == canonicalTarget
+				}
+				guard matches else { return }
+				let name = CNContactFormatter.string(from: contact, style: .fullName)?
+					.trimmingCharacters(in: .whitespacesAndNewlines)
+				if let name, !name.isEmpty {
+					matchedName = name
+					stop.pointee = true
+				}
+			}
+		} catch {
+			Log.error("\(ContactsManager.TAG) Failed direct native contact lookup: \(error.localizedDescription)")
+		}
+		return matchedName
 	}
 	
 	func getFriendWithAddressInCoreQueue(address: Address?, completion: @escaping (Friend?) -> Void) {
