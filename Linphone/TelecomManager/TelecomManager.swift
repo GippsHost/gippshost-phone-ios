@@ -53,6 +53,7 @@ class TelecomManager: ObservableObject {
 	@Published var remainingCall: Bool = false
 	@Published var callConnected: Bool = false
 	@Published var incomingCallerName: String = ""
+	private var missedCallNotifications = Set<String>()
 	@Published var meetingWaitingRoomDisplayed: Bool = false
 	@Published var meetingWaitingRoomSelected: Address?
 	@Published var meetingWaitingRoomName: String = ""
@@ -583,6 +584,7 @@ class TelecomManager: ObservableObject {
 			
 			switch cstate {
 			case .IncomingReceived:
+				missedCallNotifications.remove(callId)
 				let addr = call.remoteAddress
 				let callKitHandle = incomingCallHandle(address: addr)
 				incomingDisplayName(call: call) { displayNameResult in
@@ -728,7 +730,9 @@ class TelecomManager: ObservableObject {
 							}
 						}
 						
-						if UIApplication.shared.applicationState != .active && (callLog == nil || callLog?.status == .Missed || callLog?.status == .Aborted || callLog?.status == .EarlyAborted) {
+						if UIApplication.shared.applicationState != .active &&
+							(callLog == nil || callLog?.status == .Missed || callLog?.status == .Aborted || callLog?.status == .EarlyAborted) &&
+							self.missedCallNotifications.insert(callId).inserted {
 							// Configure the notification's payload.
 							let content = UNMutableNotificationContent()
 							content.title = NSString.localizedUserNotificationString(forKey: NSLocalizedString("notification_missed_call_title", comment: ""), arguments: nil)
@@ -772,8 +776,8 @@ class TelecomManager: ObservableObject {
 							break
 						}
 						if endCallKitReplacedCall {
-							let transaction = CXTransaction(action: CXEndCallAction(call: uuid!))
-							requestTransaction(transaction, action: "endCall")
+							let reason: CXCallEndedReason = callLog?.status == .Missed ? .unanswered : .remoteEnded
+							providerDelegate.reportRemoteCallEnded(callId: callId, reason: reason)
 						} else {
 							endCallKitReplacedCall = true
 						}

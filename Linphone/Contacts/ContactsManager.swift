@@ -443,6 +443,7 @@ final class ContactsManager: ObservableObject {
 		let normalizedIncoming = address.username.flatMap {
 			account?.normalizePhoneNumber(username: $0)
 		}
+		let canonicalIncoming = address.username.flatMap(canonicalPhoneNumber)
 		
 		func matches(_ friend: Friend) -> Bool {
 			
@@ -451,14 +452,15 @@ final class ContactsManager: ObservableObject {
 			}
 			
 			let phoneMatch = friend.phoneNumbers.contains { phone in
-				guard
-					let normalizedIncoming,
-					!normalizedIncoming.isEmpty,
-					let normalized = account?.normalizePhoneNumber(username: phone),
-					!normalized.isEmpty
-				else {
-					return false
+				if let canonicalIncoming,
+				   let canonicalPhone = canonicalPhoneNumber(phone),
+				   canonicalPhone == canonicalIncoming {
+					return true
 				}
+				guard let normalizedIncoming,
+					  !normalizedIncoming.isEmpty,
+					  let normalized = account?.normalizePhoneNumber(username: phone),
+					  !normalized.isEmpty else { return false }
 				return normalized == normalizedIncoming
 			}
 			return sipMatch || phoneMatch
@@ -492,6 +494,21 @@ final class ContactsManager: ObservableObject {
 		}
 		
 		return friend
+	}
+
+	/// Produces one stable Australian national form for contact matching without
+	/// relying on the account's optional international-prefix preference.
+	private func canonicalPhoneNumber(_ value: String) -> String? {
+		var digits = value.filter(\.isNumber)
+		if digits.hasPrefix("001161") {
+			digits = String(digits.dropFirst(4))
+		}
+		if digits.hasPrefix("61"), digits.count == 11 {
+			digits = "0" + digits.dropFirst(2)
+		} else if digits.count == 9, let first = digits.first, "234578".contains(first) {
+			digits = "0" + digits
+		}
+		return digits.count >= 8 ? digits : nil
 	}
 	
 	func getFriendWithAddressInCoreQueue(address: Address?, completion: @escaping (Friend?) -> Void) {

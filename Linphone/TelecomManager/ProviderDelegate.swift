@@ -162,6 +162,13 @@ class ProviderDelegate: NSObject {
 	func decline(uuid: UUID) {
 		provider.reportCall(with: uuid, endedAt: .init(), reason: .unanswered)
 	}
+
+	func reportRemoteCallEnded(callId: String, reason: CXCallEndedReason) {
+		guard let uuid = uuids.removeValue(forKey: callId) else { return }
+		callInfos.removeValue(forKey: uuid)
+		Log.info("CallKit: reporting remotely ended call-id: [\(callId)] and UUID: [\(uuid.description)]")
+		provider.reportCall(with: uuid, endedAt: .init(), reason: reason)
+	}
 	
 	func endCallNotExist(uuid: UUID, timeout: DispatchTime) {
 		DispatchQueue.main.asyncAfter(deadline: timeout) {
