@@ -19,7 +19,6 @@
 
 import PushKit
 import CallKit
-import UserNotifications
 
 class EarlyPushkitDelegate: NSObject, PKPushRegistryDelegate, CXProviderDelegate {
 	private var activeCalls: [String: (uuid: UUID, provider: CXProvider)] = [:]
@@ -31,7 +30,6 @@ class EarlyPushkitDelegate: NSObject, PKPushRegistryDelegate, CXProviderDelegate
 		action.fail()
 		provider.reportCall(with: action.callUUID, endedAt: .init(), reason: .unanswered)
 		activeCalls = activeCalls.filter { $0.value.uuid != action.callUUID }
-		postMissedCallNotification(trigger: nil)
 	}
 
 	func pushRegistry(_ registry: PKPushRegistry, didUpdate pushCredentials: PKPushCredentials, for type: PKPushType) {
@@ -62,7 +60,6 @@ class EarlyPushkitDelegate: NSObject, PKPushRegistryDelegate, CXProviderDelegate
 			}
 		}
 
-		postMissedCallNotification(trigger: UNTimeIntervalNotificationTrigger(timeInterval: 4, repeats: false))
 		completion()
 
 		DispatchQueue.main.asyncAfter(deadline: .now() + 4) { [weak self] in
@@ -80,17 +77,4 @@ class EarlyPushkitDelegate: NSObject, PKPushRegistryDelegate, CXProviderDelegate
 		return update
 	}
 
-	private func postMissedCallNotification(trigger: UNNotificationTrigger?) {
-		let content = UNMutableNotificationContent()
-		content.title = NSLocalizedString("early_push_missed_call_title", comment: "")
-		content.body = NSLocalizedString("early_push_missed_call_body", comment: "")
-		content.sound = .default
-		content.interruptionLevel = .timeSensitive
-		let request = UNNotificationRequest(identifier: "early_push_missed_call", content: content, trigger: trigger)
-		UNUserNotificationCenter.current().add(request) { error in
-			if let error = error {
-				Log.error("[EarlyPushkitDelegate] Failed to post missed call notification: \(error.localizedDescription)")
-			}
-		}
-	}
 }

@@ -53,7 +53,8 @@ class TelecomManager: ObservableObject {
 	@Published var remainingCall: Bool = false
 	@Published var callConnected: Bool = false
 	@Published var incomingCallerName: String = ""
-	private var missedCallNotifications = Set<String>()
+	private var recentlyEndedIncomingCalls: [String: Date] = [:]
+	private let endedIncomingCallLifetime: TimeInterval = 60
 	@Published var meetingWaitingRoomDisplayed: Bool = false
 	@Published var meetingWaitingRoomSelected: Address?
 	@Published var meetingWaitingRoomName: String = ""
@@ -467,6 +468,16 @@ class TelecomManager: ObservableObject {
 	func onCallStateChanged(core: Core, call: Call, state cstate: Call.State, message: String) {
 		let callLog = call.callLog
 		let callId = callLog?.callId ?? ""
+		let incomingState = cstate == .PushIncomingReceived || cstate == .IncomingReceived
+
+		if incomingState, !callId.isEmpty, isRecentlyEndedIncomingCall(callId) {
+			Log.info("CallKit: suppressing replay of ended incoming call-id [\(callId)] in state [\(cstate)]")
+			if providerDelegate.adoptPendingIncomingCall(callId: callId) != nil {
+				providerDelegate.reportRemoteCallEnded(callId: callId, reason: .unanswered)
+			}
+			try? call.terminate()
+			return
+		}
 
 		if UserDefaults.standard.bool(forKey: "gippshost_do_not_disturb"),
 		   (cstate == .PushIncomingReceived || cstate == .IncomingReceived) {
@@ -591,7 +602,6 @@ class TelecomManager: ObservableObject {
 			
 			switch cstate {
 			case .IncomingReceived:
-				missedCallNotifications.remove(callId)
 				let addr = call.remoteAddress
 				let callKitHandle = incomingCallHandle(address: addr)
 				incomingDisplayName(call: call) { displayNameResult in
@@ -612,7 +622,7 @@ class TelecomManager: ObservableObject {
 					}
 	#endif
 					if TelecomManager.callKitEnabled(core: core) {
-						let uuid = self.providerDelegate.uuids["\(callId)"]
+						let uuid = self.providerDelegate.adoptPendingIncomingCall(callId: callId)
 						TelecomManager.uuidReplacedCall = callId
 						
 						if uuid != nil {
@@ -692,6 +702,9 @@ class TelecomManager: ObservableObject {
 				}
 			case .End,
 					.Error:
+				if call.dir == .Incoming, !callId.isEmpty {
+					recentlyEndedIncomingCalls[callId] = Date()
+				}
 				
 				UIDevice.current.isProximityMonitoringEnabled = false
 				if core.callsNb == 0 {
@@ -737,29 +750,12 @@ class TelecomManager: ObservableObject {
 							}
 						}
 						
-						if UIApplication.shared.applicationState != .active &&
-							(callLog == nil || callLog?.status == .Missed || callLog?.status == .Aborted || callLog?.status == .EarlyAborted) &&
-							self.missedCallNotifications.insert(callId).inserted {
-							// Configure the notification's payload.
-							let content = UNMutableNotificationContent()
-							content.title = NSString.localizedUserNotificationString(forKey: NSLocalizedString("notification_missed_call_title", comment: ""), arguments: nil)
-							content.body = NSString.localizedUserNotificationString(forKey: displayName, arguments: nil)
-							
-							// Deliver the notification.
-							let request = UNNotificationRequest(identifier: "call_request", content: content, trigger: nil) // Schedule the notification.
-							let center = UNUserNotificationCenter.current()
-							center.add(request) { (error: Error?) in
-								if error != nil {
-									Log.info("Error while adding notification request : \(error!.localizedDescription)")
-								}
-							}
-						}
 					}
 				}
 				// }
 				
 				if TelecomManager.callKitEnabled(core: core) {
-					var uuid = providerDelegate.uuids["\(callId)"]
+					var uuid = providerDelegate.adoptPendingIncomingCall(callId: callId)
 					if callId == referedToCall {
 						// refered call ended before connecting
 						Log.info("Callkit: end refered to call: \(String(describing: referedToCall))")
@@ -809,6 +805,12 @@ class TelecomManager: ObservableObject {
 			AnyHashable("state"): NSNumber(value: cstate.rawValue),
 			AnyHashable("message"): message
 		])
+	}
+
+	private func isRecentlyEndedIncomingCall(_ callId: String) -> Bool {
+		let cutoff = Date().addingTimeInterval(-endedIncomingCallLifetime)
+		recentlyEndedIncomingCalls = recentlyEndedIncomingCalls.filter { $0.value >= cutoff }
+		return recentlyEndedIncomingCalls[callId] != nil
 	}
 }
 

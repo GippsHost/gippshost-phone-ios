@@ -169,6 +169,27 @@ class ProviderDelegate: NSObject {
 		Log.info("CallKit: reporting remotely ended call-id: [\(callId)] and UUID: [\(uuid.description)]")
 		provider.reportCall(with: uuid, endedAt: .init(), reason: reason)
 	}
+
+	/// PushIncomingReceived can arrive before liblinphone has populated the SIP
+	/// Call-ID. Re-key that one placeholder instead of creating a second CallKit
+	/// call when IncomingReceived supplies the real ID.
+	func adoptPendingIncomingCall(callId: String) -> UUID? {
+		if let uuid = uuids[callId] {
+			return uuid
+		}
+		guard !callId.isEmpty,
+			  let pendingUUID = uuids[""],
+			  callInfos[pendingUUID]?.isOutgoing == false else { return nil }
+
+		uuids.removeValue(forKey: "")
+		uuids[callId] = pendingUUID
+		if let callInfo = callInfos[pendingUUID] {
+			callInfo.callId = callId
+			callInfos[pendingUUID] = callInfo
+		}
+		Log.info("CallKit: adopted pending incoming UUID [\(pendingUUID.description)] for call-id [\(callId)]")
+		return pendingUUID
+	}
 	
 	func endCallNotExist(uuid: UUID, timeout: DispatchTime) {
 		DispatchQueue.main.asyncAfter(deadline: timeout) {
