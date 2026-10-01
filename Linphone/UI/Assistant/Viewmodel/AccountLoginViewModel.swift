@@ -21,6 +21,7 @@ import linphonesw
 import SwiftUI
 
 class AccountLoginViewModel: ObservableObject {
+	static let managedRegistrationExpires = 30 * 24 * 60 * 60
 	
 	private var coreContext = CoreContext.shared
 	
@@ -128,6 +129,7 @@ class AccountLoginViewModel: ObservableObject {
 				
 				// And we ensure the account will start the registration process
 				accountParams.registerEnabled = true
+				accountParams.expires = Self.managedRegistrationExpires
 				
 				accountParams.pushNotificationAllowed = true
 				accountParams.remotePushNotificationAllowed = false

@@ -189,6 +189,7 @@ class CoreContext: ObservableObject {
 		let needsServerUpdate = !currentServer.contains(expectedProxy) ||
 			params.serverAddress?.transport != .Tcp
 		let needsRouteUpdate = !params.routesAddresses.isEmpty
+		let needsExpiryUpdate = params.expires != AccountLoginViewModel.managedRegistrationExpires
 		let needsPushUpdate = !params.pushNotificationAllowed ||
 			params.remotePushNotificationAllowed ||
 			params.pushNotificationConfig?.provider != expectedPushProvider ||
@@ -207,7 +208,7 @@ class CoreContext: ObservableObject {
 			params.limeServerUrl != nil ||
 			params.conferenceFactoryAddress != nil ||
 			params.audioVideoConferenceFactoryAddress != nil
-		guard needsServerUpdate || needsRouteUpdate || needsPushUpdate || needsNatUpdate || needsServiceSanitization else { return }
+		guard needsServerUpdate || needsRouteUpdate || needsExpiryUpdate || needsPushUpdate || needsNatUpdate || needsServiceSanitization else { return }
 
 		guard let newParams = params.clone() else { return }
 		if needsServerUpdate,
@@ -216,6 +217,7 @@ class CoreContext: ObservableObject {
 			try? newParams.setServeraddress(newValue: proxyAddress)
 		}
 		try? newParams.setRoutesaddresses(newValue: [])
+		newParams.expires = AccountLoginViewModel.managedRegistrationExpires
 		newParams.pushNotificationAllowed = true
 		newParams.remotePushNotificationAllowed = false
 		newParams.pushNotificationConfig?.provider = expectedPushProvider
